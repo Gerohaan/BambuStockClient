@@ -1,14 +1,72 @@
 <template>
-  <div>
-    <p>{{ title }}</p>
-    <ul>
-      <li v-for="todo in todos" :key="todo.id" @click="increment">
-        {{ todo.id }} - {{ todo.content }}
-      </li>
-    </ul>
-    <p>Count: {{ todoCount }} / {{ meta.totalCount }}</p>
-    <p>Active: {{ active ? 'yes' : 'no' }}</p>
-    <p>Clicks on todos: {{ clickCount }}</p>
+  <div class="q-pa-md row items-start q-gutter-md">
+    <q-card class="col">
+      <q-card-section class="q-pa-md bg-white text-primary">
+        <div class="col">
+          <p class="text-h6">Ventas totales</p>
+        </div>
+        <div class="col text-right">
+          <p class="text-h3">1230 $</p>
+        </div>
+      </q-card-section>
+    </q-card>
+    <q-card class="col">
+      <q-card-section class="q-pa-md bg-white text-primary">
+        <div class="col">
+          <p class="text-h6">Compras</p>
+        </div>
+        <div class="col text-right">
+          <p class="text-h3">1000 $</p>
+        </div>
+      </q-card-section>
+    </q-card>
+    <q-card class="col">
+      <q-card-section class="q-pa-md bg-white text-primary">
+        <div class="col">
+          <p class="text-h6">Utilidades</p>
+        </div>
+        <div class="col text-right">
+          <p class="text-h3">1230 $</p>
+        </div>
+      </q-card-section>
+    </q-card>
+  </div>
+  <div class="q-pa-md row items-start q-gutter-md">
+    <q-card class="col text-primary">
+      <q-card-section>
+        <div class="text-h6">Productos más vendidos</div>
+        <apexchart
+          type="donut"
+          class=""
+          :options="optionsD"
+          :series="seriesD"
+        ></apexchart>
+      </q-card-section>
+    </q-card>
+    <q-card class="col text-primary">
+      <q-card-section>
+        <div class="text-h6">Ventas por mes</div>
+        <apexchart
+          type="bar"
+          class=""
+          :options="options"
+          :series="series"
+        ></apexchart>
+      </q-card-section>
+    </q-card>
+    <q-card class="col text-primary">
+      <q-card-section>
+        <div class="text-h6">Categorias más vendidas</div>
+        <apexchart
+          type="bar"
+          class=""
+          :options="optionsL"
+          :series="seriesL"
+        ></apexchart>
+      </q-card-section>
+    </q-card>
+  </div>
+  <!--  <div>
     <p>
       <button @click="showAlert">Hello world</button>
     </p>
@@ -20,7 +78,7 @@
         :series="series"
       ></apexchart>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script setup lang="ts">
@@ -40,9 +98,24 @@ const props = withDefaults(defineProps<Props>(), {
 const options = {
   chart: {
     id: 'vuechart-example',
+    toolbar: {
+      show: false,
+    },
+  },
+  plotOptions: {
+    bar: {
+      borderRadius: 10,
+    },
   },
   xaxis: {
     categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998],
+  },
+  colors: ['#4caf50'],
+  grid: {
+    row: {
+      colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+      opacity: 0.5,
+    },
   },
 };
 const series = [
@@ -51,6 +124,71 @@ const series = [
     data: [30, 40, 45, 50, 49, 60, 70, 91],
   },
 ];
+
+const seriesD = [44, 55, 41, 17, 15];
+
+const seriesL = [
+  {
+    data: [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380],
+  },
+];
+
+const optionsD = {
+  chart: {
+    type: 'donut',
+    toolbar: {
+      show: false,
+    },
+  },
+  colors: ['#4caf50'],
+  responsive: [
+    {
+      breakpoint: 480,
+      options: {
+        chart: {
+          width: 200,
+        },
+        legend: {
+          position: 'bottom',
+        },
+      },
+    },
+  ],
+};
+
+const optionsL = {
+  chart: {
+    type: 'bar',
+    height: 350,
+    toolbar: {
+      show: false,
+    },
+  },
+  colors: ['#4caf50'],
+  plotOptions: {
+    bar: {
+      borderRadius: 4,
+      horizontal: true,
+    },
+  },
+  dataLabels: {
+    enabled: false,
+  },
+  xaxis: {
+    categories: [
+      'Categoria 1',
+      'Categoria 2',
+      'Categoria 3',
+      'Categoria 4',
+      'Categoria 5',
+      'Categoria 6',
+      'Categoria 7',
+      'Categoria 8',
+      'Categoria 9',
+      'Categoria 10',
+    ],
+  },
+};
 
 function showAlert() {
   swal.fire({

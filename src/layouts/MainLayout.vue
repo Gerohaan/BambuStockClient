@@ -1,7 +1,7 @@
 <template>
   <q-layout class="app-font" view="lHh Lpr lFf">
     <q-header class="">
-      <q-toolbar class="bg-purple-6 text-blue-grey-7">
+      <q-toolbar class="bg-primary text-blue-grey-7">
         <q-btn
           flat
           dense
@@ -16,26 +16,27 @@
           flat
           round
           dense
-          icon="build"
-          color="white"
-          class="q-mr-sm q-ml-sm"
-          size="md"
-        />
-        <q-btn
-          flat
-          round
-          dense
           color="white"
           icon="notifications"
           size="md"
-          class="q-mr-sm"
+          class=""
+        />
+        <q-btn
+          dense
+          label="User Name"
+          outline
+          style="border-radius: 8px"
+          padding="2px 12px 2px 12px"
+          color="primary"
+          class="bg-white"
+          size="md"
         />
         <q-btn flat round dense icon="more_vert" size="md" color="white" />
       </q-toolbar>
     </q-header>
 
     <q-drawer
-      class="bg-purple-6"
+      class="bg-primary"
       v-model="leftDrawerOpen"
       show-if-above
       :width="260"
@@ -44,6 +45,13 @@
       @mouseover="miniState = false"
       @mouseout="miniState = true"
     >
+      <div class="bg-transparent q-pa-sm">
+        <q-avatar size="56px" class="">
+          <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
+        </q-avatar>
+        <div class="text-weight-bold text-white">User Name</div>
+        <div class="text-white">@username</div>
+      </div>
       <q-list dense padding class="q-mt-md text-white">
         <q-item active clickable v-ripple>
           <q-expansion-item
@@ -60,9 +68,43 @@
         <q-item>
           <q-expansion-item
             class="rounded-borders"
+            expand-icon-class="text-white"
             expand-separator
-            icon="home_work"
-            label="Adminstración"
+            icon="inventory_2"
+            label="Inventario"
+            no-caps
+          >
+          </q-expansion-item>
+        </q-item>
+        <q-item>
+          <q-expansion-item
+            class="rounded-borders"
+            expand-icon-class="text-white"
+            expand-separator
+            icon="real_estate_agent"
+            label="Ventas"
+            no-caps
+          >
+          </q-expansion-item>
+        </q-item>
+        <q-item>
+          <q-expansion-item
+            class="rounded-borders"
+            expand-icon-class="text-white"
+            expand-separator
+            icon="shopping_cart_checkout"
+            label="Compras"
+            no-caps
+          >
+          </q-expansion-item>
+        </q-item>
+        <q-item>
+          <q-expansion-item
+            class="rounded-borders"
+            expand-icon-class="text-white"
+            expand-separator
+            icon="insert_chart"
+            label="Reportes"
             no-caps
           >
           </q-expansion-item>
@@ -70,8 +112,9 @@
         <q-item>
           <q-expansion-item
             :content-inset-level="0.5"
+            expand-icon-class="text-white"
             expand-separator
-            icon="person"
+            icon="groups"
             label="Terceros"
             no-caps
           >
@@ -110,9 +153,10 @@
         <q-item>
           <q-expansion-item
             :content-inset-level="0.5"
+            expand-icon-class="text-white"
             expand-separator
-            icon="payments"
-            label="Definición"
+            icon="home_repair_service"
+            label="Servicios"
             no-caps
           >
             <q-expansion-item

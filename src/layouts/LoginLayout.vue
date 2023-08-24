@@ -1,7 +1,7 @@
 <template>
   <q-layout class="app-font" view="lHh Lpr lFf">
     <q-header class="">
-      <q-toolbar class="bg-green-6 text-blue-grey-7">
+      <q-toolbar class="bg-primary text-blue-grey-7">
         <q-toolbar-title class="text-white"> BambúStock </q-toolbar-title>
       </q-toolbar>
     </q-header>
