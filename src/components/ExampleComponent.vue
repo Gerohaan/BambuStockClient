@@ -1,71 +1,84 @@
 <template>
-  <div class="q-pa-md row items-start q-gutter-md">
-    <q-card class="col">
-      <q-card-section class="q-pa-md bg-white text-primary">
-        <div class="col">
-          <p class="text-h6">Ventas totales</p>
-        </div>
-        <div class="col text-right">
-          <p class="text-h3">1230 $</p>
-        </div>
-      </q-card-section>
-    </q-card>
-    <q-card class="col">
-      <q-card-section class="q-pa-md bg-white text-primary">
-        <div class="col">
-          <p class="text-h6">Compras</p>
-        </div>
-        <div class="col text-right">
-          <p class="text-h3">1000 $</p>
-        </div>
-      </q-card-section>
-    </q-card>
-    <q-card class="col">
-      <q-card-section class="q-pa-md bg-white text-primary">
-        <div class="col">
-          <p class="text-h6">Utilidades</p>
-        </div>
-        <div class="col text-right">
-          <p class="text-h3">1230 $</p>
-        </div>
-      </q-card-section>
-    </q-card>
+  <div class="row q-pa-sm">
+    <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-md">
+      <q-card class="">
+        <q-card-section class="bg-white text-primary">
+          <div class="col">
+            <p class="text-h6">Ventas totales</p>
+          </div>
+          <div class="col text-right">
+            <p class="text-h3">1230 $</p>
+          </div>
+        </q-card-section>
+      </q-card>
+    </div>
+    <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-md">
+      <q-card class="">
+        <q-card-section class="q-pa-md bg-white text-primary">
+          <div class="col">
+            <p class="text-h6">Compras</p>
+          </div>
+          <div class="col text-right">
+            <p class="text-h3">1000 $</p>
+          </div>
+        </q-card-section>
+      </q-card>
+    </div>
+    <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-md">
+      <q-card class="">
+        <q-card-section class="q-pa-md bg-white text-primary">
+          <div class="col">
+            <p class="text-h6">Utilidades</p>
+          </div>
+          <div class="col text-right">
+            <p class="text-h3">1230 $</p>
+          </div>
+        </q-card-section>
+      </q-card>
+    </div>
   </div>
-  <div class="q-pa-md row items-start q-gutter-md">
-    <q-card class="col text-primary">
-      <q-card-section>
-        <div class="text-h6">Productos más vendidos</div>
-        <apexchart
-          type="donut"
-          class=""
-          :options="optionsD"
-          :series="seriesD"
-        ></apexchart>
-      </q-card-section>
-    </q-card>
-    <q-card class="col text-primary">
-      <q-card-section>
-        <div class="text-h6">Ventas por mes</div>
-        <apexchart
-          type="bar"
-          class=""
-          :options="options"
-          :series="series"
-        ></apexchart>
-      </q-card-section>
-    </q-card>
-    <q-card class="col text-primary">
-      <q-card-section>
-        <div class="text-h6">Categorias más vendidas</div>
-        <apexchart
-          type="bar"
-          class=""
-          :options="optionsL"
-          :series="seriesL"
-        ></apexchart>
-      </q-card-section>
-    </q-card>
+  <div class="row q-pa-md">
+    <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-md">
+      <q-card class="text-primary" style="height: 90%; max-height: 90%">
+        <q-card-section>
+          <div class="text-h6">Productos más vendidos</div>
+          <apexchart
+            type="donut"
+            class=""
+            :options="optionsD"
+            :series="seriesD"
+          ></apexchart>
+        </q-card-section>
+      </q-card>
+    </div>
+    <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-md">
+      <q-card class="text-primary" style="height: 90%; max-height: 90%">
+        <q-card-section>
+          <div class="text-h6">Ventas por mes</div>
+          <apexchart
+            type="bar"
+            class=""
+            :options="options"
+            :series="series"
+          ></apexchart>
+        </q-card-section>
+      </q-card>
+    </div>
+    <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-md">
+      <q-card class="text-primary" style="height: 90%; max-height: 90%">
+        <q-card-section>
+          <div class="text-h6">Categorias más vendidas</div>
+          <apexchart
+            type="bar"
+            class=""
+            :options="optionsL"
+            :series="seriesL"
+          ></apexchart>
+        </q-card-section>
+      </q-card>
+    </div>
   </div>
+
   <!--  <div>
     <p>
       <button @click="showAlert">Hello world</button>
