@@ -4,7 +4,6 @@
       <q-table
         class="text-bold"
         :rows="rows"
-        bordered
         :columns="columns"
         row-key="name"
         :filter="filter"
@@ -22,12 +21,34 @@
             </template>
           </q-input>
         </template>
+        <template v-slot:body="props">
+          <q-tr :props="props">
+            <q-td key="name" auto-width> {{ props.row.name }} </q-td>
+            <q-td key="description" auto-width> {{ props.row.calories }} </q-td>
+            <q-td key="status" auto-width> {{ props.row.calories }} </q-td>
+            <q-td key="actions" class="text-center" auto-width>
+              <q-btn
+                flat
+                icon="edit"
+                dense
+                padding="none"
+                color="primary"
+                round
+              ></q-btn>
+              <q-btn
+                flat
+                icon="delete"
+                dense
+                padding="none"
+                color="primary"
+                round
+              ></q-btn>
+            </q-td>
+          </q-tr>
+        </template>
       </q-table>
     </div>
   </div>
-  <q-page-sticky position="bottom-right" :offset="[18, 18]">
-    <q-btn fab icon="add" size="sm" color="primary" />
-  </q-page-sticky>
 </template>
 
 <script setup lang="ts">
