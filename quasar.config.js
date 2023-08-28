@@ -11,6 +11,7 @@
 const { configure } = require('quasar/wrappers');
 
 module.exports = configure(function (/* ctx */) {
+  require('dotenv').config();
   return {
     eslint: {
       // fix: true,
@@ -54,6 +55,9 @@ module.exports = configure(function (/* ctx */) {
       },
 
       vueRouterMode: 'hash', // available values: 'hash', 'history'
+      env: {
+        API_URL: process.env.API_URL,
+      },
       // vueRouterBase,
       // vueDevtools,
       // vueOptionsAPI: false,
