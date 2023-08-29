@@ -41,6 +41,7 @@
                 padding="none"
                 color="primary"
                 round
+                @click="openModalAdd()"
               ></q-btn>
               <q-btn
                 size="sm"
@@ -100,7 +101,9 @@ const columns = [
     sortable: true,
   },
 ];
-
+const openModalAdd = () => {
+  categoryStore.manageModal(true, true);
+};
 const deleteCategoria = async (id = 1) => {
   await categoryStore.CategoriaDelete(id);
   await categoryStore.CategoriaAll();

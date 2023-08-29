@@ -8,13 +8,15 @@ export const useCategoryStore = defineStore('category', {
   state: () => {
     return {
       modalAdd: false,
+      modalEdit: false,
       CategoriaId: ref({}),
       Categoria: ref([]),
     };
   },
   getters: {},
   actions: {
-    manageModal(param = true) {
+    manageModal(param = true, edit = false) {
+      if (edit) this.modalEdit = edit;
       this.modalAdd = param;
     },
     async CategoryAdd(params = {}) {
@@ -93,6 +95,41 @@ export const useCategoryStore = defineStore('category', {
           message: 'Error al intentar eliminar la categoria',
           color: 'warning',
           position: 'bottom-right',
+        });
+      }
+    },
+
+    async CategoriaUpdate(params = 1, id = 1) {
+      try {
+        var token = localStorage.getItem('token') || '';
+        const newToken = token.replace('"', ' ');
+        let updateP = await axios.put(
+          Global.url + 'categoria/update/' + `${id}`,
+          params,
+          {
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Content-type': 'Application/json',
+              Authorization: 'Bearer ' + newToken,
+            },
+          }
+        );
+
+        if (updateP.status === 200) {
+          Notify.create({
+            type: 'positive',
+            message: 'Categoria Actualizada',
+            color: 'positive',
+            position: 'bottom-right',
+          });
+        }
+      } catch (error) {
+        console.log(error);
+        Notify.create({
+          type: 'warning',
+          message: 'Error al intentar actualizar la categoria',
+          color: 'warning',
+          position: 'center',
         });
       }
     },

@@ -57,7 +57,7 @@
   </q-dialog>
 </template>
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useCategoryStore } from 'src/stores/category';
 const categoryStore = useCategoryStore();
 
@@ -80,8 +80,24 @@ const addCategory = async () => {
       console.log(err);
     });
 };
+
+const updateCategoria = async () => {
+  const params = ref({
+    nombre_categoria: categoryStore.CategoriaId.nombre_categoria,
+    detalle_categoria: categoryStore.CategoriaId.detalle_categoria,
+    status_categoria: categoryStore.CategoriaId.status_categoria,
+  });
+  await categoryStore.CategoriaUpdate(params.value, id.value);
+};
+
 const onReset = () => {
   nameCategory.value = null;
   descripcionCategory.value = null;
 };
+onMounted(async () => {
+  if (categoryStore.modalEdit) {
+    console.log('para editar');
+    return false;
+  }
+});
 </script>
