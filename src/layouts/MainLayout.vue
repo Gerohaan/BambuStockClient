@@ -25,7 +25,7 @@
         </q-btn>
         <q-btn
           dense
-          label="User Name"
+          :label="userName"
           outline
           style="border-radius: 8px"
           padding="2px 12px 2px 12px"
@@ -63,7 +63,7 @@
           <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
         </q-avatar>
         <div v-if="!leftDrawerOpen" class="text-weight-bold text-white">
-          User Name
+          {{ userName }}
         </div>
         <!-- <div class="text-white">@username</div> -->
       </div>
@@ -390,6 +390,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useUsersStore } from 'src/stores/users';
+const usersStore = useUsersStore();
 /* import EssentialLink, {
   EssentialLinkProps,
 } from 'components/EssentialLink.vue';
@@ -438,7 +440,7 @@ const essentialLinks: EssentialLinkProps[] = [
     link: 'https://awesome.quasar.dev',
   },
 ]; */
-
+const userName = localStorage.getItem('usuario');
 const leftDrawerOpen = ref(true);
 
 function toggleLeftDrawer() {

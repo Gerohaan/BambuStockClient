@@ -9,7 +9,7 @@ export const useUsersStore = defineStore('users', {
   state: () => {
     return {
       userId: ref({}),
-      user: ref([]),
+      user: ref(null),
       token: ref(''),
       userToken: ref(''),
     };
@@ -63,30 +63,21 @@ export const useUsersStore = defineStore('users', {
     },
     async userLogin(params = {}) {
       try {
-        const add = await axios.post(Global.url + 'auth/auth', params, Headers);
+        const add = await axios.post(Global.url + 'auth/auth', params);
         if (add.status === 200) {
           localStorage.setItem('token', add.data.accesToken);
-          this.token = localStorage.getItem('token');
-          localStorage.setItem('usuario', add.data.userToken);
-          this.userToken = localStorage.getItem('usuario');
-
-          Notify.create({
-            type: 'positive',
-            message: 'Inicio de sesión exitoso',
-            color: 'positive',
-            position: 'top-right',
-          });
+          localStorage.setItem('usuario', add.data.usuarioToken);
         }
       } catch (error) {
-        throw 'Error al iniciar sesión';
+        throw error;
       }
     },
 
     async userById(id = 1) {
       try {
-        var token = localStorage.getItem('token') || '';
+        const token = localStorage.getItem('token') || '';
         const newToken = token.replace('"', ' ');
-        let list = await axios.get(Global.url + 'usuario/show/' + `${id}`, {
+        const list = await axios.get(Global.url + 'usuario/show/' + `${id}`, {
           headers: {
             'Access-Control-Allow-Origin': '*',
             'Content-type': 'Application/json',
@@ -134,9 +125,9 @@ export const useUsersStore = defineStore('users', {
 
     async roleUpdate(params = {}, id = 1) {
       try {
-        var token = localStorage.getItem('token') || '';
+        const token = localStorage.getItem('token') || '';
         const newToken = token.replace('"', ' ');
-        let updateP = await axios.put(
+        const updateP = await axios.put(
           Global.url + 'rol/update/' + `${id}`,
           params,
           {

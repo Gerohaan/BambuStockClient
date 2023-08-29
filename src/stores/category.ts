@@ -8,6 +8,8 @@ export const useCategoryStore = defineStore('category', {
   state: () => {
     return {
       modalAdd: false,
+      CategoriaId: ref({}),
+      Categoria: ref([]),
     };
   },
   getters: {},
@@ -17,9 +19,9 @@ export const useCategoryStore = defineStore('category', {
     },
     async CategoryAdd(params = {}) {
       try {
-        let token = localStorage.getItem('token') || '';
+        const token = localStorage.getItem('token') || '';
         const newToken = token.replace('"', ' ');
-        let add = await axios.post(Global.url + 'categoria/add', params, {
+        const add = await axios.post(Global.url + 'categoria/add', params, {
           headers: {
             'Access-Control-Allow-Origin': '*',
             'Content-type': 'Application/json',
@@ -29,17 +31,68 @@ export const useCategoryStore = defineStore('category', {
         if (add.status === 200) {
           Notify.create({
             type: 'positive',
-            message: 'Categoria Agregada',
+            message: 'Categoria agregada',
             color: 'positive',
+            position: 'bottom-right',
           });
         }
       } catch (error) {
         console.log(params);
         Notify.create({
-          type: 'warning',
+          type: 'danger',
           message: 'Error con el Servidor',
           color: 'warning',
-          position: 'center',
+          position: 'bottom-right',
+        });
+      }
+    },
+
+    async CategoriaAll() {
+      try {
+        const token = localStorage.getItem('token') || '';
+        const newToken = token.replace('"', ' ');
+        const getAll = await axios.get(Global.url + 'categoria/list', {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-type': 'Application/json',
+            Authorization: 'Bearer ' + newToken,
+          },
+        });
+        const resp = (this.Categoria = getAll.data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async CategoriaDelete(id = 1) {
+      try {
+        const token = localStorage.getItem('token') || '';
+        const newToken = token.replace('"', ' ');
+        const lista = await axios.delete(
+          Global.url + 'categoria/delete/' + `${id}`,
+          {
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Content-type': 'Application/json',
+              Authorization: 'Bearer ' + newToken,
+            },
+          }
+        );
+        if (lista.status === 200) {
+          Notify.create({
+            type: 'positive',
+            message: 'Categoria Eliminada',
+            color: 'positive',
+            position: 'bottom-right',
+          });
+        }
+      } catch (error) {
+        console.log(error);
+        Notify.create({
+          type: 'warning',
+          message: 'Error al intentar eliminar la categoria',
+          color: 'warning',
+          position: 'bottom-right',
         });
       }
     },

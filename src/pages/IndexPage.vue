@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex-center q-pa-md">
     <div class="row">
-      <div class="col q-pa-md">
+      <div class="col col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 q-pa-md">
         <q-parallax>
           <div class="column items-center" style="">
             <q-icon name="compost" color="green-6" size="200px"></q-icon>
@@ -10,7 +10,7 @@
           </div>
         </q-parallax>
       </div>
-      <div class="col-4 q-pa-md">
+      <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-md">
         <q-form @submit.prevent="login()">
           <q-card class="q-pa-md shadow-2" bordered style="margin-top: 20%">
             <q-card-section class="text-center">
@@ -28,8 +28,8 @@
                 standout
                 bg-color="grey-2"
                 color="primary"
-                v-model="email"
-                label="Correo electrónico"
+                v-model="user"
+                label="Usuario"
                 lazy-rules
                 :rules="[(val) => (val && val.length > 0) || 'Campo requerido']"
               ></q-input>
@@ -48,6 +48,7 @@
             </q-card-section>
             <q-card-section>
               <q-btn
+                :loading="loading"
                 style="border-radius: 8px"
                 color="primary"
                 type="submit"
@@ -81,31 +82,50 @@ import { ref } from 'vue';
 import { useUsersStore } from 'src/stores/users';
 const usersStore = useUsersStore();
 import { useRouter } from 'vue-router';
-import { Notify } from 'quasar';
+import { Notify, useQuasar, QSpinnerFacebook, QSpinnerDots } from 'quasar';
+
 const router = useRouter();
 
 const loading = ref(false);
-const email = ref('');
+const user = ref('');
 const password = ref('');
+const $q = useQuasar();
 
 const login = async () => {
   loading.value = true;
+  $q.loading.show({
+    spinner: QSpinnerDots,
+    spinnerColor: 'primary',
+    spinnerSize: 110,
+    backgroundColor: 'secondary',
+    message: '',
+    messageColor: 'black',
+  });
   const params = ref({
-    usuario: email,
+    usuario: user,
     password: password,
   });
   await usersStore
     .userLogin(params.value)
-    .then(() => router.push('/app'))
+    .then(() => {
+      Notify.create({
+        type: 'positive',
+        message: 'Inicio de sesión exitoso',
+        color: 'positive',
+        position: 'bottom-right',
+      });
+      router.push('/app');
+    })
     .catch((error) => {
       Notify.create({
         type: 'danger',
-        message: error,
+        message: error.response.data,
         color: 'negative',
         position: 'bottom-right',
         icon: 'warning',
       });
     });
   loading.value = false;
+  $q.loading.hide();
 };
 </script>

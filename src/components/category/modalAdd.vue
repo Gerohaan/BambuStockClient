@@ -41,13 +41,18 @@
             bg-color="grey-2"
           ></q-input>
         </q-card-section>
-      </q-form>
 
-      <q-card-actions align="right">
-        <q-btn color="secondary" dense no-caps padding="1px 28px 1px 28px"
-          >Agregar</q-btn
-        >
-      </q-card-actions>
+        <q-card-actions align="right">
+          <q-btn
+            color="secondary"
+            type="submit"
+            dense
+            no-caps
+            padding="1px 28px 1px 28px"
+            >Agregar</q-btn
+          >
+        </q-card-actions>
+      </q-form>
     </q-card>
   </q-dialog>
 </template>
@@ -65,7 +70,15 @@ const addCategory = async () => {
     detalle_categoria: descripcionCategory,
     status_categoria: 'ACTIVO',
   });
-  await categoryStore.CategoryAdd(params.value);
+  await categoryStore
+    .CategoryAdd(params.value)
+    .then(() => {
+      categoryStore.manageModal(false);
+      categoryStore.CategoriaAll();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 const onReset = () => {
   nameCategory.value = null;

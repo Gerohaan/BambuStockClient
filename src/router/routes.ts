@@ -16,10 +16,12 @@ const routes: RouteRecordRaw[] = [
       {
         path: '',
         component: () => import('src/pages/indexApp.vue'),
+        meta: { requiresAuth: true },
       },
       {
         path: 'categorias',
         component: () => import('src/pages/categoryPage.vue'),
+        meta: { requiresAuth: true },
       },
     ],
   },
