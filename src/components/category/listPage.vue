@@ -41,7 +41,7 @@
                 padding="none"
                 color="primary"
                 round
-                @click="openModalAdd()"
+                @click="openModalAdd(props.row)"
               ></q-btn>
               <q-btn
                 size="sm"
@@ -51,7 +51,7 @@
                 padding="none"
                 color="primary"
                 round
-                @click="deleteCategoria(props.row.id)"
+                @click="confirmDelete(props.row.id)"
               ></q-btn>
             </q-td>
           </q-tr>
@@ -63,7 +63,9 @@
 
 <script setup lang="ts">
 import { computed, ref, inject } from 'vue';
+import { Notify } from 'quasar';
 import { useCategoryStore } from 'src/stores/category';
+const swal = inject('$swal');
 
 const categoryStore = useCategoryStore();
 const filter = ref('');
@@ -101,11 +103,39 @@ const columns = [
     sortable: true,
   },
 ];
-const openModalAdd = () => {
-  categoryStore.manageModal(true, true);
+const openModalAdd = (row = {}) => {
+  categoryStore.manageModal(true, true, row);
+};
+const confirmDelete = (id = 1) => {
+  swal
+    .fire({
+      title: '¿Esta seguro?',
+      text: 'Eliminará la categoría seleccionada',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#8dbc5c',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, eliminar!',
+      cancelButtonText: 'Cancelar',
+    })
+    .then((result) => {
+      if (result.isConfirmed) {
+        deleteCategoria(id);
+      }
+    });
 };
 const deleteCategoria = async (id = 1) => {
-  await categoryStore.CategoriaDelete(id);
+  try {
+    await categoryStore.CategoriaDelete(id);
+    swal.fire('Eliminada!', 'La categoría ha sido eliminada.', 'success');
+  } catch (error) {
+    Notify.create({
+      type: 'warning',
+      message: 'Error al intentar eliminar la categoria',
+      color: 'warning',
+      position: 'bottom-right',
+    });
+  }
   await categoryStore.CategoriaAll();
 };
 </script>

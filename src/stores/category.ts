@@ -9,15 +9,25 @@ export const useCategoryStore = defineStore('category', {
     return {
       modalAdd: false,
       modalEdit: false,
-      CategoriaId: ref({}),
+      editCategID: {},
+      CategoriaId: {},
       Categoria: ref([]),
     };
   },
   getters: {},
   actions: {
-    manageModal(param = true, edit = false) {
-      if (edit) this.modalEdit = edit;
-      this.modalAdd = param;
+    manageModal(param = true, edit = false, row = {}) {
+      if (edit) {
+        this.modalEdit = edit;
+        this.editCategID = row;
+        this.modalAdd = param;
+      } else {
+        this.modalAdd = param;
+      }
+      if (param === false) {
+        this.modalEdit = false;
+        this.editCategID = {};
+      }
     },
     async CategoryAdd(params = {}) {
       try {
@@ -80,30 +90,31 @@ export const useCategoryStore = defineStore('category', {
             },
           }
         );
-        if (lista.status === 200) {
+        /* if (lista.status === 200) {
           Notify.create({
             type: 'positive',
             message: 'Categoria Eliminada',
             color: 'positive',
             position: 'bottom-right',
           });
-        }
+        } */
       } catch (error) {
         console.log(error);
-        Notify.create({
+        throw error;
+        /* Notify.create({
           type: 'warning',
           message: 'Error al intentar eliminar la categoria',
           color: 'warning',
           position: 'bottom-right',
-        });
+        }); */
       }
     },
 
     async CategoriaUpdate(params = 1, id = 1) {
       try {
-        var token = localStorage.getItem('token') || '';
+        const token = localStorage.getItem('token') || '';
         const newToken = token.replace('"', ' ');
-        let updateP = await axios.put(
+        const updateP = await axios.put(
           Global.url + 'categoria/update/' + `${id}`,
           params,
           {
@@ -131,6 +142,26 @@ export const useCategoryStore = defineStore('category', {
           color: 'warning',
           position: 'center',
         });
+      }
+    },
+
+    async CategoriaById(id = 1) {
+      try {
+        console.log(id);
+
+        const token = localStorage.getItem('token') || '';
+        const newToken = token.replace('"', ' ');
+        const list = await axios.get(Global.url + 'categoria/show/' + `${id}`, {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-type': 'Application/json',
+            Authorization: 'Bearer ' + newToken,
+          },
+        });
+        const respu = (this.CategoriaId = list.data);
+        console.log(respu);
+      } catch (error) {
+        console.log(error);
       }
     },
   },

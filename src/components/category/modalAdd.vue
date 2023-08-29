@@ -2,7 +2,9 @@
   <q-dialog v-model="categoryStore.modalAdd" persistent>
     <q-card style="border-radius: 8px; width: 50%">
       <q-bar class="bg-secondary text-white">
-        <div>Agregar categoría</div>
+        <div>
+          {{ categoryStore.modalEdit ? 'Editar' : 'Agregar' }} categoría
+        </div>
 
         <q-space />
 
@@ -49,7 +51,7 @@
             dense
             no-caps
             padding="1px 28px 1px 28px"
-            >Agregar</q-btn
+            >{{ categoryStore.modalEdit ? 'Editar' : 'Agregar' }}</q-btn
           >
         </q-card-actions>
       </q-form>
@@ -60,25 +62,47 @@
 import { ref, onMounted } from 'vue';
 import { useCategoryStore } from 'src/stores/category';
 const categoryStore = useCategoryStore();
+const categoryShow = ref({});
+const nameCategoryEdit = ref('');
+const descripcionCategoryEdit = ref('');
+const statusCategoryEdt = ref('');
 
-const nameCategory = ref(null);
-const descripcionCategory = ref(null);
+const nameCategory = categoryStore.modalEdit ? nameCategoryEdit : ref(null);
+const descripcionCategory = categoryStore.modalEdit
+  ? descripcionCategoryEdit
+  : ref(null);
+
+const statusCategory = categoryStore.modalEdit
+  ? statusCategoryEdt
+  : ref('ACTIVO');
 
 const addCategory = async () => {
   const params = ref({
     nombre_categoria: nameCategory,
     detalle_categoria: descripcionCategory,
-    status_categoria: 'ACTIVO',
+    status_categoria: statusCategory,
   });
-  await categoryStore
-    .CategoryAdd(params.value)
-    .then(() => {
-      categoryStore.manageModal(false);
-      categoryStore.CategoriaAll();
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  if (categoryStore.modalEdit) {
+    await categoryStore
+      .CategoriaUpdate(params.value, categoryStore.editCategID.id)
+      .then(() => {
+        categoryStore.manageModal(false);
+        categoryStore.CategoriaAll();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } else {
+    await categoryStore
+      .CategoryAdd(params.value)
+      .then(() => {
+        categoryStore.manageModal(false);
+        categoryStore.CategoriaAll();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 };
 
 const updateCategoria = async () => {
@@ -96,7 +120,11 @@ const onReset = () => {
 };
 onMounted(async () => {
   if (categoryStore.modalEdit) {
-    console.log('para editar');
+    categoryStore.editCategID;
+    categoryShow.value = JSON.parse(JSON.stringify(categoryStore.editCategID));
+    nameCategoryEdit.value = categoryShow.value.nombre_categoria;
+    descripcionCategoryEdit.value = categoryShow.value.detalle_categoria;
+    statusCategoryEdt.value = categoryShow.value.status_categoria;
     return false;
   }
 });
