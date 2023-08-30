@@ -38,6 +38,14 @@
             <q-list dense>
               <q-item clickable>
                 <q-item-section>Dark</q-item-section>
+                <q-item-section side>
+                  <q-toggle
+                    dense
+                    size="xs"
+                    @click="darkApply()"
+                    v-model="darkMode"
+                  />
+                </q-item-section>
               </q-item>
               <q-item clickable>
                 <q-item-section>Configuración</q-item-section>
@@ -389,9 +397,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useUsersStore } from 'src/stores/users';
+import { useConfigUserStore } from 'src/stores/configUser';
+import { useQuasar } from 'quasar';
 const usersStore = useUsersStore();
+const configStore = useConfigUserStore();
 /* import EssentialLink, {
   EssentialLinkProps,
 } from 'components/EssentialLink.vue';
@@ -440,12 +451,22 @@ const essentialLinks: EssentialLinkProps[] = [
     link: 'https://awesome.quasar.dev',
   },
 ]; */
+const $q = useQuasar();
 const userName = localStorage.getItem('usuario');
 const leftDrawerOpen = ref(true);
-
+const darkMode = ref(false);
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
+const darkApply = () => {
+  configStore.applyDarkMode(darkMode.value);
+  $q.dark.set(darkMode.value);
+};
+onMounted(() => {
+  configStore.getDarkMode();
+  darkMode.value = configStore.darkMode;
+  $q.dark.set(darkMode.value);
+});
 </script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@200;400;500;600;700;800;900&display=swap');
