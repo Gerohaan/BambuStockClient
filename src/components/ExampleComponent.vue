@@ -1,8 +1,8 @@
 <template>
   <div class="row q-pa-sm">
     <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-md">
-      <q-card class="">
-        <q-card-section class="bg-white text-primary">
+      <q-card class="text-primary">
+        <q-card-section>
           <div class="col">
             <p class="text-h6">Ventas totales</p>
           </div>
@@ -13,8 +13,8 @@
       </q-card>
     </div>
     <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-md">
-      <q-card class="">
-        <q-card-section class="q-pa-md bg-white text-primary">
+      <q-card class="text-primary">
+        <q-card-section class="q-pa-md">
           <div class="col">
             <p class="text-h6">Compras</p>
           </div>
@@ -25,8 +25,8 @@
       </q-card>
     </div>
     <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-md">
-      <q-card class="">
-        <q-card-section class="q-pa-md bg-white text-primary">
+      <q-card class="text-primary">
+        <q-card-section class="q-pa-md">
           <div class="col">
             <p class="text-h6">Utilidades</p>
           </div>

@@ -1,7 +1,9 @@
 <template>
   <q-dialog v-model="categoryStore.modalAdd" persistent>
-    <q-card style="border-radius: 8px; width: 50%">
-      <q-bar class="bg-secondary text-white">
+    <q-card :dark="configStore.darkMode" style="border-radius: 8px; width: 50%">
+      <q-bar
+        :class="configStore.darkMode ? 'text-white' : 'bg-secondary text-white'"
+      >
         <div>
           {{ categoryStore.modalEdit ? 'Editar' : 'Agregar' }} categoría
         </div>
@@ -28,6 +30,7 @@
             input-class="text-black"
             dense
             label="Nombre *"
+            :label-color="configStore.darkMode ? 'dark' : ''"
             standout
             bg-color="grey-2"
           ></q-input>
@@ -39,6 +42,7 @@
             input-class="text-black"
             dense
             label="Descripción *"
+            :label-color="configStore.darkMode ? 'dark' : ''"
             standout
             bg-color="grey-2"
           ></q-input>
@@ -46,7 +50,7 @@
 
         <q-card-actions align="right">
           <q-btn
-            color="secondary"
+            :color="configStore.darkMode ? 'dark' : 'secondary'"
             type="submit"
             dense
             no-caps
@@ -61,7 +65,9 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
 import { useCategoryStore } from 'src/stores/category';
+import { useConfigUserStore } from 'src/stores/configUser';
 const categoryStore = useCategoryStore();
+const configStore = useConfigUserStore();
 const categoryShow = ref({});
 const nameCategoryEdit = ref('');
 const descripcionCategoryEdit = ref('');

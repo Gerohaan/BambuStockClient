@@ -1,7 +1,7 @@
 <template>
   <q-layout class="app-font" view="lHh Lpr lFf">
     <q-header class="">
-      <q-toolbar class="bg-primary text-blue-grey-7">
+      <q-toolbar :class="configStore.darkMode ? 'bg-dark' : 'bg-primary'">
         <q-btn
           flat
           dense
@@ -34,7 +34,11 @@
           size="md"
         />
         <q-btn flat round dense icon="more_vert" size="md" color="white">
-          <q-menu auto-close class="bg-secondary text-white">
+          <q-menu
+            auto-close
+            :class="configStore.darkMode ? 'bg-dark' : 'bg-secondary'"
+            class="text-white"
+          >
             <q-list dense>
               <q-item clickable>
                 <q-item-section>Dark</q-item-section>
@@ -60,7 +64,7 @@
     </q-header>
 
     <q-drawer
-      class="bg-primary"
+      :class="configStore.darkMode ? 'bg-dark' : 'bg-primary'"
       show-if-above
       :width="200"
       bordered
