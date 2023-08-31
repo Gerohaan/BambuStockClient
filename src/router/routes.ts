@@ -23,6 +23,11 @@ const routes: RouteRecordRaw[] = [
         component: () => import('src/pages/categoryPage.vue'),
         meta: { requiresAuth: true },
       },
+      {
+        path: 'almacens',
+        component: () => import('src/pages/storePage.vue'),
+        meta: { requiresAuth: true },
+      },
     ],
   },
 
