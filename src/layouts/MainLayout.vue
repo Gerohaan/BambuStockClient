@@ -99,7 +99,7 @@
             </q-item-section>
             <q-item-section>Categorias</q-item-section>
           </q-item>
-          <q-item clickable v-ripple>
+          <q-item clickable active-class="white" to="/app/almacens" v-ripple>
             <q-item-section avatar>
               <q-icon color="white" name="schedule" />
             </q-item-section>
@@ -459,7 +459,7 @@ const $q = useQuasar();
 const userName = localStorage.getItem('usuario');
 const leftDrawerOpen = ref(true);
 const darkMode = ref(false);
-function toggleLeftDrawer () {
+function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
 const darkApply = () => {
