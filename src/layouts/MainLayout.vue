@@ -459,7 +459,7 @@ const $q = useQuasar();
 const userName = localStorage.getItem('usuario');
 const leftDrawerOpen = ref(true);
 const darkMode = ref(false);
-function toggleLeftDrawer() {
+function toggleLeftDrawer () {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
 const darkApply = () => {
