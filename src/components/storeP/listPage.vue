@@ -29,9 +29,9 @@
             <q-td key="ubicacion" auto-width>
               {{ props.row.ubicacion_bodega }}
             </q-td>
-            <q-td key="status" auto-width>
+            <!-- <q-td key="status" auto-width>
               {{ props.row.status_bodega }}
-            </q-td>
+            </q-td> -->
             <q-td key="actions" class="text-center" auto-width>
               <q-btn
                 size="sm"
@@ -88,13 +88,13 @@ const columns = [
     field: row => row.ubicacion_bodega,
     sortable: true
   },
-  {
-    name: 'status',
-    align: 'left',
-    label: 'Estatus',
-    field: row => row.status_bodega,
-    sortable: true
-  },
+  // {
+  //   name: 'status',
+  //   align: 'left',
+  //   label: 'Estatus',
+  //   field: row => row.status_bodega,
+  //   sortable: true
+  // },
   {
     name: 'actions',
     align: 'center',
@@ -110,7 +110,7 @@ const confirmDelete = (id = 1) => {
   swal
     .fire({
       title: '¿Esta seguro?',
-      text: 'Eliminará el Almacen seleccionado',
+      text: 'Eliminará el almacen seleccionado',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#8dbc5c',
@@ -127,7 +127,7 @@ const confirmDelete = (id = 1) => {
 const deleteStore = async (id = 1) => {
   try {
     await storePStore.storeDelete(id);
-    swal.fire('Eliminada!', 'El almacen ha sido eliminado.', 'success');
+    swal.fire('Eliminado!', 'El almacen ha sido eliminado.', 'success');
   } catch (error) {
     Notify.create({
       type: 'warning',
