@@ -15,16 +15,19 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: '',
+        name: 'index',
         component: () => import('src/pages/indexApp.vue'),
         meta: { requiresAuth: true },
       },
       {
         path: 'categorias',
+        name: 'categories',
         component: () => import('src/pages/categoryPage.vue'),
         meta: { requiresAuth: true },
       },
       {
         path: 'almacens',
+        name: 'warehouses',
         component: () => import('src/pages/storePage.vue'),
         meta: { requiresAuth: true },
       },
