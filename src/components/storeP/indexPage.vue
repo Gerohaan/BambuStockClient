@@ -1,7 +1,7 @@
 <template>
   <div class="row q-pa-sm">
     <div class="col-12 q-pa-sm">
-      <p class="text-h5 text-primary">Almacens</p>
+      <p class="text-h5 text-primary">Almacen</p>
     </div>
     <div class="col-12 q-pl-md q-pr-md" align="right">
       <q-btn
