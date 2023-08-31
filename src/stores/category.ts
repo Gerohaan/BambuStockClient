@@ -3,6 +3,7 @@ import { Global } from 'src/config/Global';
 import axios from 'axios';
 import { ref } from 'vue';
 import { Notify } from 'quasar';
+import { useRouter } from 'vue-router';
 
 export const useCategoryStore = defineStore('category', {
   state: () => {
@@ -12,6 +13,7 @@ export const useCategoryStore = defineStore('category', {
       editCategID: {},
       CategoriaId: {},
       Categoria: ref([]),
+      router: useRouter(),
     };
   },
   getters: {},
@@ -72,6 +74,15 @@ export const useCategoryStore = defineStore('category', {
         });
         const resp = (this.Categoria = getAll.data);
       } catch (error) {
+        if (error.response.status === 403) {
+          Notify.create({
+            type: 'danger',
+            message: error.response.data,
+            color: 'negative',
+            position: 'bottom-right',
+          });
+          this.router.push('/');
+        }
         console.log(error);
       }
     },
