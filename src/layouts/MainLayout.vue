@@ -80,7 +80,7 @@
         <!-- <div class="text-white">@username</div> -->
       </div>
       <q-list class="q-mt-md text-white">
-        <q-item clickable active-class="white" to="/app" v-ripple>
+        <q-item clickable active-class="white" :to="{ name: 'index' }" v-ripple>
           <q-item-section avatar>
             <q-icon color="white" name="dashboard" />
           </q-item-section>
@@ -93,13 +93,23 @@
           label="Inventario"
           no-caps
         >
-          <q-item clickable active-class="white" to="/app/categorias" v-ripple>
+          <q-item
+            clickable
+            active-class="white"
+            :to="{ name: 'categories' }"
+            v-ripple
+          >
             <q-item-section avatar>
               <q-icon color="white" name="receipt" />
             </q-item-section>
             <q-item-section>Categorias</q-item-section>
           </q-item>
-          <q-item clickable active-class="white" to="/app/almacens" v-ripple>
+          <q-item
+            clickable
+            active-class="white"
+            :to="{ name: 'warehouses' }"
+            v-ripple
+          >
             <q-item-section avatar>
               <q-icon color="white" name="schedule" />
             </q-item-section>
