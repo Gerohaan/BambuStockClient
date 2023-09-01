@@ -43,7 +43,7 @@ export const useUnitStore = defineStore('unit', {
         if (add.status === 200) {
           Notify.create({
             type: 'positive',
-            message: 'Unidad de medida agregado',
+            message: 'Unidad de medida agregada',
             color: 'positive',
             position: 'bottom-right',
           });
@@ -115,7 +115,7 @@ export const useUnitStore = defineStore('unit', {
         if (updateP.status === 200) {
           Notify.create({
             type: 'positive',
-            message: 'Unidad de medida actualizado',
+            message: 'Unidad de medida actualizada',
             color: 'positive',
             position: 'bottom-right',
           });

@@ -110,7 +110,7 @@ const confirmDelete = (id = 1) => {
   swal
     .fire({
       title: '¿Esta seguro?',
-      text: 'Eliminará la unidad de medida seleccionado',
+      text: 'Eliminará la unidad de medida seleccionada',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#8dbc5c',
@@ -129,7 +129,7 @@ const deleteUnit = async (id = 1) => {
     await unitStore.unitDelete(id);
     swal.fire(
       'Eliminado!',
-      'La unidad de medida ha sido eliminado.',
+      'La unidad de medida ha sido eliminada.',
       'success'
     );
   } catch (error) {
