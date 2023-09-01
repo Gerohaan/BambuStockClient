@@ -4,14 +4,14 @@ import axios from 'axios';
 import { ref } from 'vue';
 import { Notify } from 'quasar';
 
-export const useStorePStore = defineStore('storeP', {
+export const useUnitStore = defineStore('unit', {
   state: () => {
     return {
       modalAdd: false,
       modalEdit: false,
-      editStoreID: {},
-      storeId: {},
-      store: ref([]),
+      editUnitID: {},
+      unitId: {},
+      unit: ref([]),
     };
   },
   getters: {},
@@ -19,21 +19,21 @@ export const useStorePStore = defineStore('storeP', {
     manageModal(param = true, edit = false, row = {}) {
       if (edit) {
         this.modalEdit = edit;
-        this.editStoreID = row;
+        this.editUnitID = row;
         this.modalAdd = param;
       } else {
         this.modalAdd = param;
       }
       if (param === false) {
         this.modalEdit = false;
-        this.editStoreID = {};
+        this.editUnitID = {};
       }
     },
-    async storeAdd(params = {}) {
+    async unitAdd(params = {}) {
       try {
         const token = localStorage.getItem('token') || '';
         const newToken = token.replace('"', ' ');
-        const add = await axios.post(Global.url + 'bodega/add', params, {
+        const add = await axios.post(Global.url + 'unidad/add', params, {
           headers: {
             'Access-Control-Allow-Origin': '*',
             'Content-type': 'Application/json',
@@ -43,13 +43,13 @@ export const useStorePStore = defineStore('storeP', {
         if (add.status === 200) {
           Notify.create({
             type: 'positive',
-            message: 'Almacen agregado',
+            message: 'Unidad de medida agregado',
             color: 'positive',
             position: 'bottom-right',
           });
         }
       } catch (error) {
-        console.log(params);
+        console.log(error);
         Notify.create({
           type: 'danger',
           message: 'Error con el Servidor',
@@ -59,29 +59,29 @@ export const useStorePStore = defineStore('storeP', {
       }
     },
 
-    async storeAll() {
+    async unitAll() {
       try {
         const token = localStorage.getItem('token') || '';
         const newToken = token.replace('"', ' ');
-        const getAll = await axios.get(Global.url + 'bodega/list', {
+        const getAll = await axios.get(Global.url + 'unidad/list', {
           headers: {
             'Access-Control-Allow-Origin': '*',
             'Content-type': 'Application/json',
             Authorization: 'Bearer ' + newToken,
           },
         });
-        const resp = (this.store = getAll.data);
+        const resp = (this.unit = getAll.data);
       } catch (error) {
         console.log(error);
       }
     },
 
-    async storeDelete(id = 1) {
+    async unitDelete(id = 1) {
       try {
         const token = localStorage.getItem('token') || '';
         const newToken = token.replace('"', ' ');
         const lista = await axios.delete(
-          Global.url + 'bodega/delete/' + `${id}`,
+          Global.url + 'unidad/delete/' + `${id}`,
           {
             headers: {
               'Access-Control-Allow-Origin': '*',
@@ -96,12 +96,12 @@ export const useStorePStore = defineStore('storeP', {
       }
     },
 
-    async storeUpdate(params = 1, id = 1) {
+    async unitUpdate(params = 1, id = 1) {
       try {
         const token = localStorage.getItem('token') || '';
         const newToken = token.replace('"', ' ');
         const updateP = await axios.put(
-          Global.url + 'bodega/update/' + `${id}`,
+          Global.url + 'unidad/update/' + `${id}`,
           params,
           {
             headers: {
@@ -115,7 +115,7 @@ export const useStorePStore = defineStore('storeP', {
         if (updateP.status === 200) {
           Notify.create({
             type: 'positive',
-            message: 'Almacen Actualizado',
+            message: 'Unidad de medida actualizado',
             color: 'positive',
             position: 'bottom-right',
           });
@@ -124,28 +124,27 @@ export const useStorePStore = defineStore('storeP', {
         console.log(error);
         Notify.create({
           type: 'warning',
-          message: 'Error al intentar actualizar el almacen',
+          message: 'Error al intentar actualizar la unidad de medida',
           color: 'warning',
           position: 'center',
         });
       }
     },
 
-    async storeById(id = 1) {
+    async unitById(id = 1) {
       try {
         console.log(id);
 
         const token = localStorage.getItem('token') || '';
         const newToken = token.replace('"', ' ');
-        const list = await axios.get(Global.url + 'bodega/show/' + `${id}`, {
+        const list = await axios.get(Global.url + 'unidad/show/' + `${id}`, {
           headers: {
             'Access-Control-Allow-Origin': '*',
             'Content-type': 'Application/json',
             Authorization: 'Bearer ' + newToken,
           },
         });
-        const respu = (this.editStoreID = list.data);
-        console.log(respu);
+        const respu = (this.unitId = list.data);
       } catch (error) {
         console.log(error);
       }

@@ -111,11 +111,16 @@
             v-ripple
           >
             <q-item-section avatar>
-              <q-icon color="white" name="schedule" />
+              <q-icon color="white" name="storefront" />
             </q-item-section>
             <q-item-section>Almacen</q-item-section>
           </q-item>
-          <q-item clickable v-ripple>
+          <q-item
+            clickable
+            active-class="white"
+            :to="{ name: 'unit' }"
+            v-ripple
+          >
             <q-item-section avatar>
               <q-icon color="white" name="schedule" />
             </q-item-section>
