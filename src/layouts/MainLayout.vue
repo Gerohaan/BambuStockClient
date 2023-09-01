@@ -122,7 +122,7 @@
             v-ripple
           >
             <q-item-section avatar>
-              <q-icon color="white" name="schedule" />
+              <q-icon color="white" name="ad_units" />
             </q-item-section>
             <q-item-section>Unidad de Medidad</q-item-section>
           </q-item>
