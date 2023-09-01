@@ -157,5 +157,24 @@ export const useUsersStore = defineStore('users', {
         });
       }
     },
+
+    async logOut() {
+      try {
+        const token = localStorage.getItem('token') || '';
+        const newToken = token.replace('"', ' ');
+        await axios.get(Global.url + 'auth/logout', {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-type': 'Application/json',
+            Authorization: 'Bearer ' + newToken,
+          },
+        });
+        localStorage.removeItem('token');
+        localStorage.removeItem('usuario');
+        localStorage.removeItem('darkMode');
+      } catch (error) {
+        throw error;
+      }
+    },
   },
 });

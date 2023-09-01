@@ -54,7 +54,7 @@
               <q-item clickable>
                 <q-item-section>Configuración</q-item-section>
               </q-item>
-              <q-item clickable>
+              <q-item clickable @click="confirmlogOut()">
                 <q-item-section>Salir</q-item-section>
               </q-item>
             </q-list>
@@ -416,60 +416,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, inject } from 'vue';
 import { useUsersStore } from 'src/stores/users';
+import { useRouter } from 'vue-router';
 import { useConfigUserStore } from 'src/stores/configUser';
-import { useQuasar } from 'quasar';
+import { Notify, useQuasar, QSpinnerFacebook, QSpinnerDots } from 'quasar';
+const swal = inject('$swal');
 const usersStore = useUsersStore();
 const configStore = useConfigUserStore();
-/* import EssentialLink, {
-  EssentialLinkProps,
-} from 'components/EssentialLink.vue';
 
-const essentialLinks: EssentialLinkProps[] = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev',
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework',
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev',
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev',
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev',
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev',
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev',
-  },
-]; */
+const router = useRouter();
 const $q = useQuasar();
 const userName = localStorage.getItem('usuario');
 const leftDrawerOpen = ref(true);
@@ -480,6 +436,59 @@ function toggleLeftDrawer () {
 const darkApply = () => {
   configStore.applyDarkMode(darkMode.value);
   $q.dark.set(darkMode.value);
+};
+const confirmlogOut = (id = 1) => {
+  swal
+    .fire({
+      title: '¿Esta seguro/a?',
+      text: 'Cerrará sesión en el sistema',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#8dbc5c',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, cerrar sesión!',
+      cancelButtonText: 'Cancelar',
+    })
+    .then((result) => {
+      if (result.isConfirmed) {
+        logOut();
+      }
+    });
+};
+const logOut = async () => {
+  $q.loading.show({
+    spinner: QSpinnerDots,
+    spinnerColor: 'primary',
+    spinnerSize: 110,
+    backgroundColor: 'secondary',
+    message: '',
+    messageColor: 'black',
+  });
+  try {
+    await usersStore.logOut();
+    router.push('/');
+    /* swal.fire({
+      title: 'Te esperamos pronto...',
+      timer: 2000,
+      timerProgressBar: true,
+    }); */
+    Notify.create({
+      type: 'positive',
+      message: 'Te esperamos pronto...',
+      color: 'positive',
+      position: 'bottom-right',
+    });
+    $q.loading.hide();
+  } catch (error) {
+    Notify.create({
+      type: 'danger',
+      message: error.response.data,
+      color: 'negative',
+      position: 'bottom-right',
+      icon: 'warning',
+    });
+    $q.loading.hide();
+  }
 };
 onMounted(() => {
   configStore.getDarkMode();
