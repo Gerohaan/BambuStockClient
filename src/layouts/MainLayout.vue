@@ -13,6 +13,16 @@
         />
         <q-toolbar-title class="text-white"> BambúStock v 1.0</q-toolbar-title>
         <q-btn
+          @click="openTabWhatsApp()"
+          flat
+          size="md"
+          round
+          dense
+          icon="img:icons/whatsapp.svg"
+        >
+          <q-tooltip class="bg-primary">Soporte whatsapp</q-tooltip>
+        </q-btn>
+        <q-btn
           flat
           round
           dense
@@ -21,6 +31,7 @@
           size="md"
           class="q-mr-sm"
         >
+          <q-tooltip class="bg-primary">Notificaciones</q-tooltip>
           <q-badge color="secondary" floating>4</q-badge>
         </q-btn>
         <q-btn
@@ -32,32 +43,51 @@
           color="secondary"
           class="bg-white"
           size="md"
-        />
+        >
+          <q-tooltip class="bg-primary">Pefíl</q-tooltip>
+        </q-btn>
         <q-btn flat round dense icon="more_vert" size="md" color="white">
-          <q-menu
-            auto-close
-            :class="configStore.darkMode ? 'bg-dark' : 'bg-secondary'"
-            class="text-white"
-          >
-            <q-list dense>
-              <q-item clickable>
-                <q-item-section>Dark</q-item-section>
-                <q-item-section side>
-                  <q-toggle
-                    dense
-                    size="xs"
-                    @click="darkApply()"
-                    v-model="darkMode"
-                  />
-                </q-item-section>
-              </q-item>
-              <q-item clickable>
-                <q-item-section>Configuración</q-item-section>
-              </q-item>
-              <q-item clickable @click="confirmlogOut()">
-                <q-item-section>Salir</q-item-section>
-              </q-item>
-            </q-list>
+          <q-menu>
+            <div class="row no-wrap q-pa-md">
+              <div class="column">
+                <div class="text-h6 q-mb-md">Ajustes</div>
+                <q-toggle
+                  label="Modo oscuro"
+                  @click="darkApply()"
+                  v-model="darkMode"
+                />
+                <q-btn
+                  padding="none"
+                  outline
+                  class="q-mt-md"
+                  color="primary"
+                  dense
+                  no-caps
+                  >Configuración</q-btn
+                >
+              </div>
+
+              <q-separator vertical inset class="q-mx-lg" />
+
+              <div class="column items-center">
+                <q-avatar size="72px">
+                  <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
+                </q-avatar>
+
+                <div class="text-subtitle1 text-center q-mt-md q-mb-xs">
+                  {{ userName }}
+                </div>
+
+                <q-btn
+                  @click="confirmlogOut()"
+                  color="primary"
+                  label="Salir"
+                  push
+                  size="sm"
+                  v-close-popup
+                />
+              </div>
+            </div>
           </q-menu>
         </q-btn>
       </q-toolbar>
@@ -70,347 +100,300 @@
       bordered
       :mini="leftDrawerOpen"
     >
-      <div class="bg-transparent q-pa-sm" align="center">
-        <q-avatar :size="leftDrawerOpen ? '36px' : '56px'" class="">
-          <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
-        </q-avatar>
-        <div v-if="!leftDrawerOpen" class="text-weight-bold text-white">
-          {{ userName }}
+      <q-scroll-area class="fit">
+        <div class="bg-transparent q-pa-sm" align="center">
+          <q-avatar :size="leftDrawerOpen ? '36px' : '56px'" class="">
+            <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
+          </q-avatar>
+          <div v-if="!leftDrawerOpen" class="text-weight-bold text-white">
+            {{ userName }}
+          </div>
         </div>
-        <!-- <div class="text-white">@username</div> -->
-      </div>
-      <q-list class="q-mt-md text-white">
-        <q-item clickable active-class="white" :to="{ name: 'index' }" v-ripple>
-          <q-item-section avatar>
-            <q-icon color="white" name="dashboard" />
-          </q-item-section>
-          <q-item-section>Inicio</q-item-section>
-        </q-item>
-        <q-expansion-item
-          :content-inset-level="0.2"
-          expand-icon-class="text-white"
-          icon="inventory_2"
-          label="Inventario"
-          no-caps
-        >
+
+        <q-list class="q-mt-md text-white">
           <q-item
             clickable
             active-class="white"
-            :to="{ name: 'categories' }"
+            :to="{ name: 'index' }"
             v-ripple
           >
             <q-item-section avatar>
-              <q-icon color="white" name="receipt" />
+              <q-icon color="white" name="dashboard" />
             </q-item-section>
-            <q-item-section>Categorias</q-item-section>
+            <q-item-section>Inicio</q-item-section>
           </q-item>
-          <q-item
-            clickable
-            active-class="white"
-            :to="{ name: 'warehouses' }"
-            v-ripple
+          <q-expansion-item
+            @click="showingInventory = true"
+            :content-inset-level="0.2"
+            expand-icon-class="text-white"
+            expand-separator
+            icon="inventory_2"
+            label="Inventario"
+            no-caps
           >
-            <q-item-section avatar>
-              <q-icon color="white" name="storefront" />
-            </q-item-section>
-            <q-item-section>Almacen</q-item-section>
-          </q-item>
-          <q-item
-            clickable
-            active-class="white"
-            :to="{ name: 'unit' }"
-            v-ripple
+            <!-- Apertura: Se mostrará si el sidebar está contraido -->
+            <q-menu v-if="leftDrawerOpen" v-model="showingInventory">
+              <q-list dense style="min-width: 100px">
+                <q-item clickable v-close-popup>
+                  <q-item-section>Open...</q-item-section>
+                </q-item>
+                <q-item clickable v-close-popup>
+                  <q-item-section>New</q-item-section>
+                </q-item>
+                <q-separator />
+                <q-item clickable>
+                  <q-item-section>Preferences</q-item-section>
+                  <q-item-section side>
+                    <q-icon name="keyboard_arrow_right" />
+                  </q-item-section>
+
+                  <q-menu anchor="top end" self="top start">
+                    <q-list>
+                      <q-item v-for="n in 3" :key="n" dense clickable>
+                        <q-item-section>Submenu Label</q-item-section>
+                        <q-item-section side>
+                          <q-icon name="keyboard_arrow_right" />
+                        </q-item-section>
+                        <q-menu auto-close anchor="top end" self="top start">
+                          <q-list>
+                            <q-item v-for="n in 3" :key="n" dense clickable>
+                              <q-item-section>3rd level Label</q-item-section>
+                            </q-item>
+                          </q-list>
+                        </q-menu>
+                      </q-item>
+                    </q-list>
+                  </q-menu>
+                </q-item>
+                <q-separator />
+                <q-item clickable v-close-popup>
+                  <q-item-section>Quit</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+            <!-- Cierre: Se mostrará si el sidebar está contraido -->
+            <q-item
+              clickable
+              active-class="white"
+              :to="{ name: 'categories' }"
+              v-ripple
+            >
+              <q-item-section avatar>
+                <q-icon color="white" name="category" />
+              </q-item-section>
+              <q-item-section>Categorias</q-item-section>
+            </q-item>
+            <q-item
+              clickable
+              active-class="white"
+              :to="{ name: 'warehouses' }"
+              v-ripple
+            >
+              <q-item-section avatar>
+                <q-icon color="white" name="storefront" />
+              </q-item-section>
+              <q-item-section>Almacen</q-item-section>
+            </q-item>
+            <q-item
+              clickable
+              active-class="white"
+              :to="{ name: 'unit' }"
+              v-ripple
+            >
+              <q-item-section avatar>
+                <q-icon color="white" name="ad_units" />
+              </q-item-section>
+              <q-item-section>Unidad de Medidad</q-item-section>
+            </q-item>
+            <q-item clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon color="white" name="conveyor_belt" />
+              </q-item-section>
+              <q-item-section>Presentación del Producto</q-item-section>
+            </q-item>
+            <q-item clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon color="white" name="eco" />
+              </q-item-section>
+              <q-item-section>Productos</q-item-section>
+            </q-item>
+            <q-item clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon color="white" name="payments" />
+              </q-item-section>
+              <q-item-section>Tipos de pago</q-item-section>
+            </q-item>
+          </q-expansion-item>
+
+          <q-expansion-item
+            @click="showingSales = true"
+            :content-inset-level="0.2"
+            class="rounded-borders"
+            expand-separator
+            expand-icon-class="text-white"
+            icon="real_estate_agent"
+            label="Ventas"
+            no-caps
           >
-            <q-item-section avatar>
-              <q-icon color="white" name="ad_units" />
-            </q-item-section>
-            <q-item-section>Unidad de Medidad</q-item-section>
-          </q-item>
-          <q-item clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon color="white" name="schedule" />
-            </q-item-section>
-            <q-item-section>Presentación del Producto</q-item-section>
-          </q-item>
-          <q-item clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon color="white" name="schedule" />
-            </q-item-section>
-            <q-item-section>Producto</q-item-section>
-          </q-item>
-          <q-item clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon color="white" name="schedule" />
-            </q-item-section>
-            <q-item-section>Tipo de Pagos</q-item-section>
-          </q-item>
-          <q-item clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon color="white" name="schedule" />
-            </q-item-section>
-            <q-item-section>Roles de Usuario</q-item-section>
-          </q-item>
-          <q-item clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon color="white" name="schedule" />
-            </q-item-section>
-            <q-item-section>Usuario</q-item-section>
-          </q-item>
-        </q-expansion-item>
+            <!-- Apertura: Se mostrará si el sidebar está contraido -->
+            <q-menu v-if="leftDrawerOpen" v-model="showingSales">
+              <q-list dense style="min-width: 100px">
+                <q-item clickable v-close-popup>
+                  <q-item-section>Open...</q-item-section>
+                </q-item>
+                <q-item clickable v-close-popup>
+                  <q-item-section>New</q-item-section>
+                </q-item>
+                <q-separator />
+                <q-item clickable>
+                  <q-item-section>Preferences</q-item-section>
+                  <q-item-section side>
+                    <q-icon name="keyboard_arrow_right" />
+                  </q-item-section>
 
-        <q-expansion-item
-          class="rounded-borders"
-          expand-icon-class="text-white"
-          expand-separator
-          icon="real_estate_agent"
-          label="Ventas"
-          no-caps
-        >
-        </q-expansion-item>
+                  <q-menu anchor="top end" self="top start">
+                    <q-list>
+                      <q-item v-for="n in 3" :key="n" dense clickable>
+                        <q-item-section>Submenu Label</q-item-section>
+                        <q-item-section side>
+                          <q-icon name="keyboard_arrow_right" />
+                        </q-item-section>
+                        <q-menu auto-close anchor="top end" self="top start">
+                          <q-list>
+                            <q-item v-for="n in 3" :key="n" dense clickable>
+                              <q-item-section>3rd level Label</q-item-section>
+                            </q-item>
+                          </q-list>
+                        </q-menu>
+                      </q-item>
+                    </q-list>
+                  </q-menu>
+                </q-item>
+                <q-separator />
+                <q-item clickable v-close-popup>
+                  <q-item-section>Quit</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+            <!-- Cierre: Se mostrará si el sidebar está contraido -->
+            <q-item clickable active-class="white" v-ripple>
+              <q-item-section avatar>
+                <q-icon color="white" name="point_of_sale" />
+              </q-item-section>
+              <q-item-section>Ventas en caja</q-item-section>
+            </q-item>
+            <q-item clickable active-class="white" v-ripple>
+              <q-item-section avatar>
+                <q-icon color="white" name="shopping_cart" />
+              </q-item-section>
+              <q-item-section>Ventas en linea</q-item-section>
+            </q-item>
+          </q-expansion-item>
+          <q-item clickable active-class="white" v-ripple>
+            <q-item-section avatar>
+              <q-icon color="white" name="shopping_cart_checkout" />
+            </q-item-section>
+            <q-item-section>Compras</q-item-section>
+          </q-item>
+          <q-item clickable active-class="white" v-ripple>
+            <q-item-section avatar>
+              <q-icon color="white" name="insert_chart" />
+            </q-item-section>
+            <q-item-section>Reportes</q-item-section>
+          </q-item>
 
-        <q-expansion-item
-          class="rounded-borders"
-          expand-icon-class="text-white"
-          expand-separator
-          icon="shopping_cart_checkout"
-          label="Compras"
-          no-caps
-        >
-        </q-expansion-item>
+          <q-expansion-item
+            @click="showingThirdParties = true"
+            :content-inset-level="0.5"
+            expand-icon-class="text-white"
+            expand-separator
+            icon="groups"
+            label="Terceros"
+            no-caps
+          >
+            <!-- Apertura: Se mostrará si el sidebar está contraido -->
+            <q-menu v-if="leftDrawerOpen" v-model="showingThirdParties">
+              <q-list dense style="min-width: 100px">
+                <q-item clickable v-close-popup>
+                  <q-item-section>Open...</q-item-section>
+                </q-item>
+                <q-item clickable v-close-popup>
+                  <q-item-section>New</q-item-section>
+                </q-item>
+                <q-separator />
+                <q-item clickable>
+                  <q-item-section>Preferences</q-item-section>
+                  <q-item-section side>
+                    <q-icon name="keyboard_arrow_right" />
+                  </q-item-section>
 
-        <q-expansion-item
-          class="rounded-borders"
-          expand-icon-class="text-white"
-          expand-separator
-          icon="insert_chart"
-          label="Reportes"
-          no-caps
-        >
-        </q-expansion-item>
-
-        <q-expansion-item
-          :content-inset-level="0.5"
-          expand-icon-class="text-white"
-          expand-separator
-          icon="groups"
-          label="Terceros"
-          no-caps
-        >
-          <q-item-section class="text-white" side>
-            <q-btn
-              size="14px"
-              :to="{ name: 'personas' }"
-              flat
-              icon="person"
-              label="Personas"
-              no-caps
-            ></q-btn>
-          </q-item-section>
-          <q-item-section class="text-white" side>
-            <q-btn
-              size="14px"
+                  <q-menu anchor="top end" self="top start">
+                    <q-list>
+                      <q-item v-for="n in 3" :key="n" dense clickable>
+                        <q-item-section>Submenu Label</q-item-section>
+                        <q-item-section side>
+                          <q-icon name="keyboard_arrow_right" />
+                        </q-item-section>
+                        <q-menu auto-close anchor="top end" self="top start">
+                          <q-list>
+                            <q-item v-for="n in 3" :key="n" dense clickable>
+                              <q-item-section>3rd level Label</q-item-section>
+                            </q-item>
+                          </q-list>
+                        </q-menu>
+                      </q-item>
+                    </q-list>
+                  </q-menu>
+                </q-item>
+                <q-separator />
+                <q-item clickable v-close-popup>
+                  <q-item-section>Quit</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+            <!-- Cierre: Se mostrará si el sidebar está contraido -->
+            <q-item
+              clickable
+              active-class="white"
               :to="{ name: 'clientes' }"
-              flat
-              icon="person"
-              label="Clientes"
-              no-caps
-            ></q-btn>
-          </q-item-section>
-          <q-item-section class="text-white" side>
-            <q-btn
+              v-ripple
+            >
+              <q-item-section avatar>
+                <q-icon color="white" name="person" />
+              </q-item-section>
+              <q-item-section>Clientes</q-item-section>
+            </q-item>
+            <q-item
+              clickable
+              active-class="white"
               :to="{ name: 'proveedores' }"
-              size="14px"
-              flat
-              icon="person"
-              label="Proveedores"
-              no-caps
-            ></q-btn>
-          </q-item-section>
-        </q-expansion-item>
-
-        <q-expansion-item
-          :content-inset-level="0.5"
-          expand-icon-class="text-white"
-          expand-separator
-          icon="home_repair_service"
-          label="Servicios"
-          no-caps
-        >
-          <q-expansion-item
-            expand-separator
-            :content-inset-level="0.5"
-            icon="receipt"
-            label="Categorias"
-          >
-            <q-item-section side>
-              <q-btn
-                label="Agregar"
-                :to="{ name: 'categorias' }"
-                size="md"
-                flat
-                icon="add"
-                no-caps
-                color="primary"
-              ></q-btn>
-            </q-item-section>
+              v-ripple
+            >
+              <q-item-section avatar>
+                <q-icon color="white" name="hail" />
+              </q-item-section>
+              <q-item-section>Proveedores</q-item-section>
+            </q-item>
           </q-expansion-item>
-          <q-expansion-item
-            expand-separator
-            :content-inset-level="0.5"
-            icon="receipt"
-            label="Empresas"
-          >
-            <q-item-section side>
-              <q-btn
-                label="Agregar"
-                :to="{ name: 'empresas' }"
-                size="md"
-                flat
-                icon="add"
-                no-caps
-                color="primary"
-              ></q-btn>
+          <q-item clickable active-class="white" v-ripple>
+            <q-item-section avatar>
+              <q-icon color="white" name="home_repair_service" />
             </q-item-section>
-          </q-expansion-item>
-          <q-expansion-item
-            :content-inset-level="0.5"
-            expand-separator
-            icon="storefront"
-            label="Almacen"
-          >
-            <q-item-section side>
-              <q-btn
-                size="md"
-                flat
-                icon="add"
-                color="primary"
-                no-caps
-                :to="{ name: 'almacens' }"
-                label="Agregar"
-              >
-              </q-btn>
+            <q-item-section>Servicios</q-item-section>
+          </q-item>
+          <q-item clickable active-class="white" v-ripple>
+            <q-item-section avatar>
+              <q-icon color="white" name="help_outline" />
             </q-item-section>
-          </q-expansion-item>
-          <q-expansion-item
-            :content-inset-level="0.5"
-            expand-separator
-            icon="schedule"
-            label="Unidad de Medidad"
-          >
-            <q-item-section side>
-              <q-btn
-                size="md"
-                flat
-                icon="add"
-                color="primary"
-                no-caps
-                :to="{ name: 'medida' }"
-                label="Agregar"
-              >
-              </q-btn>
-            </q-item-section>
-          </q-expansion-item>
-          <q-expansion-item
-            :content-inset-level="0.5"
-            expand-separator
-            icon="schedule"
-            label="Presentación del Producto"
-          >
-            <q-item-section side>
-              <q-btn
-                size="md"
-                flat
-                icon="add"
-                color="primary"
-                no-caps
-                :to="{ name: 'presentaciones' }"
-                label="Agregar"
-              >
-              </q-btn>
-            </q-item-section>
-          </q-expansion-item>
-          <q-expansion-item
-            :content-inset-level="0.5"
-            expand-separator
-            icon="schedule"
-            label="Producto"
-          >
-            <q-item-section side>
-              <q-btn
-                size="md"
-                flat
-                icon="add"
-                color="primary"
-                no-caps
-                :to="{ name: 'productos' }"
-                label="Agregar"
-              >
-              </q-btn>
-            </q-item-section>
-          </q-expansion-item>
-          <q-expansion-item
-            :content-inset-level="0.5"
-            expand-separator
-            icon="schedule"
-            label="Tipo de Pagos"
-          >
-            <q-item-section side>
-              <q-btn
-                size="md"
-                flat
-                icon="add"
-                color="primary"
-                no-caps
-                to="/FormaPago"
-                label="Agregar"
-              >
-              </q-btn>
-            </q-item-section>
-          </q-expansion-item>
-          <q-expansion-item
-            :content-inset-level="0.5"
-            expand-separator
-            icon="schedule"
-            label="Roles de Usuario"
-          >
-            <q-item-section side>
-              <q-btn
-                size="md"
-                flat
-                icon="add"
-                color="primary"
-                no-caps
-                :to="{ name: 'roles' }"
-                label="Agregar"
-              >
-              </q-btn>
-            </q-item-section>
-          </q-expansion-item>
-          <q-expansion-item
-            :content-inset-level="0.5"
-            expand-separator
-            icon="schedule"
-            label="Usuario"
-          >
-            <q-item-section side>
-              <q-btn
-                size="md"
-                flat
-                icon="add"
-                color="primary"
-                no-caps
-                :to="{ name: 'usuarios' }"
-                label="Agregar"
-              >
-              </q-btn>
-            </q-item-section>
-          </q-expansion-item>
-        </q-expansion-item>
-      </q-list>
+            <q-item-section>Soporte</q-item-section>
+          </q-item>
+        </q-list>
+      </q-scroll-area>
     </q-drawer>
-
     <q-page-container>
-      <router-view />
+      <transition name="fade">
+        <router-view />
+      </transition>
     </q-page-container>
   </q-layout>
 </template>
@@ -421,6 +404,7 @@ import { useUsersStore } from 'src/stores/users';
 import { useRouter } from 'vue-router';
 import { useConfigUserStore } from 'src/stores/configUser';
 import { Notify, useQuasar, QSpinnerFacebook, QSpinnerDots } from 'quasar';
+const whatsAppLinkSupport = 'https://api.whatsapp.com/send?phone=584143510401&';
 const swal = inject('$swal');
 const usersStore = useUsersStore();
 const configStore = useConfigUserStore();
@@ -430,9 +414,16 @@ const $q = useQuasar();
 const userName = localStorage.getItem('usuario');
 const leftDrawerOpen = ref(true);
 const darkMode = ref(false);
-function toggleLeftDrawer () {
+
+const showingInventory = ref(false);
+const showingSales = ref(false);
+const showingThirdParties = ref(false);
+function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
+const openTabWhatsApp = () => {
+  window.open(whatsAppLinkSupport, '_blank');
+};
 const darkApply = () => {
   configStore.applyDarkMode(darkMode.value);
   $q.dark.set(darkMode.value);
@@ -466,6 +457,7 @@ const logOut = async () => {
   });
   try {
     await usersStore.logOut();
+    location.reload();
     router.push('/');
     /* swal.fire({
       title: 'Te esperamos pronto...',
