@@ -326,7 +326,7 @@
                 <q-item
                   clickable
                   active-class="white"
-                  :to="{ name: 'clientes' }"
+                  :to="{ name: 'clients' }"
                   v-ripple
                 >
                   <q-item-section>Clientes</q-item-section>
@@ -345,7 +345,7 @@
             <q-item
               clickable
               active-class="white"
-              :to="{ name: 'clientes' }"
+              :to="{ name: 'clients' }"
               v-ripple
             >
               <q-item-section avatar>
