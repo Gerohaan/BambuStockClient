@@ -132,42 +132,54 @@
             no-caps
           >
             <!-- Apertura: Se mostrará si el sidebar está contraido -->
-            <q-menu v-if="leftDrawerOpen" v-model="showingInventory">
-              <q-list dense style="min-width: 100px">
-                <q-item clickable v-close-popup>
-                  <q-item-section>Open...</q-item-section>
+            <q-menu
+              square
+              style="
+                border-top-right-radius: 8px;
+                border-bottom-right-radius: 8px;
+              "
+              class="text-white"
+              :class="configStore.darkMode ? 'bg-dark' : 'bg-primary'"
+              transition-show="jump-down"
+              transition-hide="jump-up"
+              :offset="[-57, 120]"
+              self="top left"
+              v-if="leftDrawerOpen"
+              v-model="showingInventory"
+            >
+              <q-list separator dense style="min-width: 100px">
+                <q-item
+                  clickable
+                  active-class="white"
+                  :to="{ name: 'categories' }"
+                  v-ripple
+                >
+                  <q-item-section>Categorias</q-item-section>
                 </q-item>
-                <q-item clickable v-close-popup>
-                  <q-item-section>New</q-item-section>
+                <q-item
+                  clickable
+                  active-class="white"
+                  :to="{ name: 'warehouses' }"
+                  v-ripple
+                >
+                  <q-item-section>Almacen</q-item-section>
                 </q-item>
-                <q-separator />
-                <q-item clickable>
-                  <q-item-section>Preferences</q-item-section>
-                  <q-item-section side>
-                    <q-icon name="keyboard_arrow_right" />
-                  </q-item-section>
-
-                  <q-menu anchor="top end" self="top start">
-                    <q-list>
-                      <q-item v-for="n in 3" :key="n" dense clickable>
-                        <q-item-section>Submenu Label</q-item-section>
-                        <q-item-section side>
-                          <q-icon name="keyboard_arrow_right" />
-                        </q-item-section>
-                        <q-menu auto-close anchor="top end" self="top start">
-                          <q-list>
-                            <q-item v-for="n in 3" :key="n" dense clickable>
-                              <q-item-section>3rd level Label</q-item-section>
-                            </q-item>
-                          </q-list>
-                        </q-menu>
-                      </q-item>
-                    </q-list>
-                  </q-menu>
+                <q-item
+                  clickable
+                  active-class="white"
+                  :to="{ name: 'unit' }"
+                  v-ripple
+                >
+                  <q-item-section>Unidad de Medidad</q-item-section>
                 </q-item>
-                <q-separator />
-                <q-item clickable v-close-popup>
-                  <q-item-section>Quit</q-item-section>
+                <q-item clickable v-ripple>
+                  <q-item-section>Presentación del Producto</q-item-section>
+                </q-item>
+                <q-item clickable v-ripple>
+                  <q-item-section>Productos</q-item-section>
+                </q-item>
+                <q-item clickable v-ripple>
+                  <q-item-section>Tipos de pago</q-item-section>
                 </q-item>
               </q-list>
             </q-menu>
@@ -236,42 +248,26 @@
             no-caps
           >
             <!-- Apertura: Se mostrará si el sidebar está contraido -->
-            <q-menu v-if="leftDrawerOpen" v-model="showingSales">
-              <q-list dense style="min-width: 100px">
-                <q-item clickable v-close-popup>
-                  <q-item-section>Open...</q-item-section>
+            <q-menu
+              square
+              style="
+                border-top-right-radius: 8px;
+                border-bottom-right-radius: 8px;
+              "
+              class="text-white"
+              :class="configStore.darkMode ? 'bg-dark' : 'bg-primary'"
+              transition-show="jump-down"
+              transition-hide="jump-up"
+              :offset="[-57, 165]"
+              v-if="leftDrawerOpen"
+              v-model="showingSales"
+            >
+              <q-list separator dense style="min-width: 100px">
+                <q-item clickable active-class="white" v-ripple>
+                  <q-item-section>Ventas en caja</q-item-section>
                 </q-item>
-                <q-item clickable v-close-popup>
-                  <q-item-section>New</q-item-section>
-                </q-item>
-                <q-separator />
-                <q-item clickable>
-                  <q-item-section>Preferences</q-item-section>
-                  <q-item-section side>
-                    <q-icon name="keyboard_arrow_right" />
-                  </q-item-section>
-
-                  <q-menu anchor="top end" self="top start">
-                    <q-list>
-                      <q-item v-for="n in 3" :key="n" dense clickable>
-                        <q-item-section>Submenu Label</q-item-section>
-                        <q-item-section side>
-                          <q-icon name="keyboard_arrow_right" />
-                        </q-item-section>
-                        <q-menu auto-close anchor="top end" self="top start">
-                          <q-list>
-                            <q-item v-for="n in 3" :key="n" dense clickable>
-                              <q-item-section>3rd level Label</q-item-section>
-                            </q-item>
-                          </q-list>
-                        </q-menu>
-                      </q-item>
-                    </q-list>
-                  </q-menu>
-                </q-item>
-                <q-separator />
-                <q-item clickable v-close-popup>
-                  <q-item-section>Quit</q-item-section>
+                <q-item clickable active-class="white" v-ripple>
+                  <q-item-section>Ventas en linea</q-item-section>
                 </q-item>
               </q-list>
             </q-menu>
@@ -312,42 +308,36 @@
             no-caps
           >
             <!-- Apertura: Se mostrará si el sidebar está contraido -->
-            <q-menu v-if="leftDrawerOpen" v-model="showingThirdParties">
-              <q-list dense style="min-width: 100px">
-                <q-item clickable v-close-popup>
-                  <q-item-section>Open...</q-item-section>
+            <q-menu
+              square
+              style="
+                border-top-right-radius: 8px;
+                border-bottom-right-radius: 8px;
+              "
+              class="text-white"
+              :class="configStore.darkMode ? 'bg-dark' : 'bg-primary'"
+              transition-show="jump-down"
+              transition-hide="jump-up"
+              :offset="[-57, 310]"
+              v-if="leftDrawerOpen"
+              v-model="showingThirdParties"
+            >
+              <q-list separator dense style="min-width: 100px">
+                <q-item
+                  clickable
+                  active-class="white"
+                  :to="{ name: 'clientes' }"
+                  v-ripple
+                >
+                  <q-item-section>Clientes</q-item-section>
                 </q-item>
-                <q-item clickable v-close-popup>
-                  <q-item-section>New</q-item-section>
-                </q-item>
-                <q-separator />
-                <q-item clickable>
-                  <q-item-section>Preferences</q-item-section>
-                  <q-item-section side>
-                    <q-icon name="keyboard_arrow_right" />
-                  </q-item-section>
-
-                  <q-menu anchor="top end" self="top start">
-                    <q-list>
-                      <q-item v-for="n in 3" :key="n" dense clickable>
-                        <q-item-section>Submenu Label</q-item-section>
-                        <q-item-section side>
-                          <q-icon name="keyboard_arrow_right" />
-                        </q-item-section>
-                        <q-menu auto-close anchor="top end" self="top start">
-                          <q-list>
-                            <q-item v-for="n in 3" :key="n" dense clickable>
-                              <q-item-section>3rd level Label</q-item-section>
-                            </q-item>
-                          </q-list>
-                        </q-menu>
-                      </q-item>
-                    </q-list>
-                  </q-menu>
-                </q-item>
-                <q-separator />
-                <q-item clickable v-close-popup>
-                  <q-item-section>Quit</q-item-section>
+                <q-item
+                  clickable
+                  active-class="white"
+                  :to="{ name: 'proveedores' }"
+                  v-ripple
+                >
+                  <q-item-section>Proveedores</q-item-section>
                 </q-item>
               </q-list>
             </q-menu>
