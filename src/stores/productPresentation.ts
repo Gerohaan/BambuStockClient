@@ -43,7 +43,7 @@ export const useProductPresentationStore = defineStore('presentation', {
         if (add.status === 200) {
           Notify.create({
             type: 'positive',
-            message: 'Presentación del producto agregada',
+            message: 'Se ha agregado la presentación del producto',
             color: 'positive',
             position: 'bottom-right',
           });
@@ -115,7 +115,7 @@ export const useProductPresentationStore = defineStore('presentation', {
         if (updateP.status === 200) {
           Notify.create({
             type: 'positive',
-            message: 'Presentación del producto actualizada',
+            message: 'Se ha actualizado la presentación del producto',
             color: 'positive',
             position: 'bottom-right',
           });
