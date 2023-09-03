@@ -100,7 +100,7 @@ const confirmDelete = (id = 1) => {
   swal
     .fire({
       title: '¿Esta seguro?',
-      text: 'Eliminará la forma de pago seleccionada',
+      text: 'Eliminará el tipo de pago seleccionado',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#8dbc5c',
@@ -117,11 +117,11 @@ const confirmDelete = (id = 1) => {
 const deletePayment = async (id = 1) => {
   try {
     await paymentStore.paymentDelete(id);
-    swal.fire('Eliminado!', 'La forma de pago ha sido eliminada.', 'success');
+    swal.fire('Eliminado!', 'El tipo de pago ha sido eliminado.', 'success');
   } catch (error) {
     Notify.create({
       type: 'warning',
-      message: 'Error al intentar eliminar la forma de pago',
+      message: 'Error al intentar eliminar el tipo de pago',
       color: 'warning',
       position: 'bottom-right'
     });

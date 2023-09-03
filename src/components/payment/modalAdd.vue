@@ -5,7 +5,7 @@
         :class="configStore.darkMode ? 'text-white' : 'bg-secondary text-white'"
       >
         <div>
-          {{ paymentStore.modalEdit ? 'Editar' : 'Agregar' }} forma de pago
+          {{ paymentStore.modalEdit ? 'Editar' : 'Agregar' }} tipo de pago
         </div>
 
         <q-space />

@@ -43,7 +43,7 @@ export const usePaymentStore = defineStore('payment', {
         if (add.status === 200) {
           Notify.create({
             type: 'positive',
-            message: 'Forma de pago agregada',
+            message: 'Tipo de pago agregado',
             color: 'positive',
             position: 'bottom-right',
           });
@@ -115,7 +115,7 @@ export const usePaymentStore = defineStore('payment', {
         if (updateP.status === 200) {
           Notify.create({
             type: 'positive',
-            message: 'Forma de pago actualizada',
+            message: 'El tipo de pago se ha actualizado',
             color: 'positive',
             position: 'bottom-right',
           });
@@ -124,7 +124,7 @@ export const usePaymentStore = defineStore('payment', {
         console.log(error);
         Notify.create({
           type: 'warning',
-          message: 'Error al intentar actualizar la forma de pago',
+          message: 'Error al intentar actualizar el tipo de pago',
           color: 'warning',
           position: 'center',
         });
