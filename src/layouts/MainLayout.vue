@@ -156,6 +156,7 @@
                 >
                   <q-item-section>Categorias</q-item-section>
                 </q-item>
+
                 <q-item
                   clickable
                   active-class="white"
@@ -164,6 +165,7 @@
                 >
                   <q-item-section>Almacen</q-item-section>
                 </q-item>
+
                 <q-item
                   clickable
                   active-class="white"
@@ -172,9 +174,16 @@
                 >
                   <q-item-section>Unidad de Medidad</q-item-section>
                 </q-item>
-                <q-item clickable v-ripple>
+
+                <q-item
+                  clickable
+                  active-class="white"
+                  :to="{ name: 'presentation' }"
+                  v-ripple
+                >
                   <q-item-section>Presentación del Producto</q-item-section>
                 </q-item>
+
                 <q-item clickable v-ripple>
                   <q-item-section>Productos</q-item-section>
                 </q-item>
@@ -217,7 +226,12 @@
               </q-item-section>
               <q-item-section>Unidad de Medidad</q-item-section>
             </q-item>
-            <q-item clickable v-ripple>
+            <q-item
+              clickable
+              active-class="white"
+              :to="{ name: 'presentation' }"
+              v-ripple
+            >
               <q-item-section avatar>
                 <q-icon color="white" name="conveyor_belt" />
               </q-item-section>
@@ -408,7 +422,7 @@ const darkMode = ref(false);
 const showingInventory = ref(false);
 const showingSales = ref(false);
 const showingThirdParties = ref(false);
-function toggleLeftDrawer() {
+function toggleLeftDrawer () {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
 const openTabWhatsApp = () => {
@@ -428,9 +442,9 @@ const confirmlogOut = (id = 1) => {
       confirmButtonColor: '#8dbc5c',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Si, cerrar sesión!',
-      cancelButtonText: 'Cancelar',
+      cancelButtonText: 'Cancelar'
     })
-    .then((result) => {
+    .then(result => {
       if (result.isConfirmed) {
         logOut();
       }
@@ -443,7 +457,7 @@ const logOut = async () => {
     spinnerSize: 110,
     backgroundColor: 'secondary',
     message: '',
-    messageColor: 'black',
+    messageColor: 'black'
   });
   try {
     await usersStore.logOut();
@@ -458,7 +472,7 @@ const logOut = async () => {
       type: 'positive',
       message: 'Te esperamos pronto...',
       color: 'positive',
-      position: 'bottom-right',
+      position: 'bottom-right'
     });
     $q.loading.hide();
   } catch (error) {
@@ -467,7 +481,7 @@ const logOut = async () => {
       message: error.response.data,
       color: 'negative',
       position: 'bottom-right',
-      icon: 'warning',
+      icon: 'warning'
     });
     $q.loading.hide();
   }
