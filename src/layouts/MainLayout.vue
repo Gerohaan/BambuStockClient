@@ -187,7 +187,12 @@
                 <q-item clickable v-ripple>
                   <q-item-section>Productos</q-item-section>
                 </q-item>
-                <q-item clickable v-ripple>
+                <q-item
+                  clickable
+                  active-class="white"
+                  :to="{ name: 'payment' }"
+                  v-ripple
+                >
                   <q-item-section>Tipos de pago</q-item-section>
                 </q-item>
               </q-list>
