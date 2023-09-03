@@ -243,7 +243,12 @@
               </q-item-section>
               <q-item-section>Productos</q-item-section>
             </q-item>
-            <q-item clickable v-ripple>
+            <q-item
+              clickable
+              active-class="white"
+              :to="{ name: 'payment' }"
+              v-ripple
+            >
               <q-item-section avatar>
                 <q-icon color="white" name="payments" />
               </q-item-section>
