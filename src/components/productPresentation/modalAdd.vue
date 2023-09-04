@@ -27,7 +27,7 @@
             <q-input
               v-model="namePresentation"
               lazy-rules
-              :rules="[val => (val && val.length > 0) || 'Campo requerido']"
+              :rules="[(val) => (val && val.length > 0) || 'Campo requerido']"
               class="col-6 q-pa-md"
               input-class="text-black"
               dense
@@ -39,7 +39,7 @@
             <q-input
               v-model="descriptionPresentation"
               lazy-rules
-              :rules="[val => (val && val.length > 0) || 'Campo requerido']"
+              :rules="[(val) => (val && val.length > 0) || 'Campo requerido']"
               class="col-6 q-pa-md"
               input-class="text-black"
               dense
@@ -51,7 +51,7 @@
             <q-input
               v-model="abrevPresentation"
               lazy-rules
-              :rules="[val => (val && val.length > 0) || 'Campo requerido']"
+              :rules="[(val) => (val && val.length > 0) || 'Campo requerido']"
               class="col-6 q-pa-md"
               input-class="text-black"
               dense
@@ -62,7 +62,7 @@
             ></q-input>
             <div class="col-6 q-pa-md">
               <q-select
-                required
+                :rules="[(val) => !!val || 'Selecciona una opción.']"
                 use-input
                 hide-selected
                 fill-input
@@ -72,11 +72,11 @@
                 v-model="uniPresentation"
                 :options="apilista"
                 :option-label="
-                  apilista =>
+                  (apilista) =>
                     apilista === null ? null : apilista.nombre_unidad
                 "
                 :option-value="
-                  apilista => (apilista === null ? null : apilista.id)
+                  (apilista) => (apilista === null ? null : apilista.id)
                 "
                 emit-value
                 map-options
@@ -149,7 +149,7 @@ const addPresentation = async () => {
     descripcion_present: descriptionPresentation,
     unidadMedidadId: uniPresentation,
     abreviatura_present: abrevPresentation,
-    status_present: statusPresentation
+    status_present: statusPresentation,
   });
   if (presentationStore.modalEdit) {
     await presentationStore
@@ -158,7 +158,7 @@ const addPresentation = async () => {
         presentationStore.manageModal(false);
         presentationStore.presentationAll();
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   } else {
@@ -168,7 +168,7 @@ const addPresentation = async () => {
         presentationStore.manageModal(false);
         presentationStore.presentationAll();
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   }
