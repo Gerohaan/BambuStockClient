@@ -11,23 +11,137 @@
         selection="multiple"
         v-model:selected="selected"
       >
-        <template v-slot:top-right>
-          <q-input
-            outlined
-            dense
-            debounce="300"
-            v-model="filter"
-            placeholder="Busqueda..."
+        <template v-slot:top>
+          <q-toolbar
+            style="border-radius: 8px"
+            :class="$q.dark.isActive ? 'bg-grey-9 text-white' : 'bg-grey-3'"
           >
-            <template v-slot:append>
-              <q-icon name="search" />
-            </template>
-          </q-input>
+            <q-btn-dropdown
+              class="col"
+              dense
+              padding="none"
+              round
+              flat
+              color="primary"
+              no-caps
+              label="Acciones Generales"
+            >
+              <q-list>
+                <q-item clickable tabindex="0">
+                  <q-item-section avatar>
+                    <q-avatar
+                      icon="delete"
+                      size="md"
+                      color="secondary"
+                      text-color="white"
+                    />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>Eliminar</q-item-label>
+                    <q-item-label caption>{{
+                      getSelectedString()
+                    }}</q-item-label>
+                  </q-item-section>
+                  <q-item-section side>
+                    <q-icon name="info" />
+                  </q-item-section>
+                </q-item>
+                <q-item clickable tabindex="0">
+                  <q-item-section avatar>
+                    <q-avatar
+                      icon="edit"
+                      size="md"
+                      color="secondary"
+                      text-color="white"
+                    />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>Ajustar precios</q-item-label>
+                    <q-item-label caption>{{
+                      getSelectedString()
+                    }}</q-item-label>
+                  </q-item-section>
+                  <q-item-section side>
+                    <q-icon name="info" />
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-btn-dropdown>
+            <q-btn-dropdown
+              dense
+              class="col q-ml-md"
+              padding="none"
+              round
+              flat
+              color="primary"
+              no-caps
+              label="Filtros"
+            >
+              <q-list>
+                <q-item clickable tabindex="0">
+                  <q-item-section avatar>
+                    <q-avatar
+                      icon="delete"
+                      size="md"
+                      color="secondary"
+                      text-color="white"
+                    />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>Eliminar</q-item-label>
+                    <q-item-label caption>{{
+                      getSelectedString()
+                    }}</q-item-label>
+                  </q-item-section>
+                  <q-item-section side>
+                    <q-icon name="info" />
+                  </q-item-section>
+                </q-item>
+                <q-item clickable tabindex="0">
+                  <q-item-section avatar>
+                    <q-avatar
+                      icon="edit"
+                      size="md"
+                      color="secondary"
+                      text-color="white"
+                    />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>Ajustar precios</q-item-label>
+                    <q-item-label caption>{{
+                      getSelectedString()
+                    }}</q-item-label>
+                  </q-item-section>
+                  <q-item-section side>
+                    <q-icon name="info" />
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-btn-dropdown>
+            <q-input
+              class="col"
+              outlined
+              dense
+              debounce="300"
+              v-model="filter"
+              placeholder="Busqueda..."
+            >
+              <template v-slot:append>
+                <q-icon name="search" />
+              </template>
+            </q-input>
+          </q-toolbar>
         </template>
         <template v-slot:body="props">
           <q-tr :props="props">
-            <q-td auto-width>
-              <q-checkbox dense v-model="props.selected" />
+            <q-td class="text-center">
+              <q-checkbox
+                dense
+                color="primary"
+                size="xs"
+                keep-color
+                v-model="props.selected"
+              />
             </q-td>
             <q-td key="codeProduct" auto-width> 12 </q-td>
             <q-td key="name" auto-width>
@@ -153,7 +267,7 @@ const getSelectedString = () => {
     ? ''
     : `${selected.value.length} registro${
         selected.value.length > 1 ? 's' : ''
-      } seleccionado de ${payment.value.length}`;
+      } de ${payment.value.length}`;
 };
 const openModalAdd = (row = {}) => {
   paymentStore.manageModal(true, true, row);
