@@ -129,7 +129,7 @@ const deletePresentation = async (id = 1) => {
     await presentationStore.presentationDelete(id);
     swal.fire(
       'Eliminado!',
-      'La presentación del producto ha sido eliminada.',
+      'Se ha eliminado la presentación del producto.',
       'success'
     );
   } catch (error) {
