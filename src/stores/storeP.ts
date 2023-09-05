@@ -3,6 +3,7 @@ import { Global } from 'src/config/Global';
 import axios from 'axios';
 import { ref } from 'vue';
 import { Notify } from 'quasar';
+import { useRouter } from 'vue-router';
 
 export const useStorePStore = defineStore('storeP', {
   state: () => {
@@ -12,6 +13,7 @@ export const useStorePStore = defineStore('storeP', {
       editStoreID: {},
       storeId: {},
       store: ref([]),
+      router: useRouter()
     };
   },
   getters: {},
@@ -72,6 +74,15 @@ export const useStorePStore = defineStore('storeP', {
         });
         const resp = (this.store = getAll.data);
       } catch (error) {
+        if (error.response.status === 403) {
+          Notify.create({
+            type: 'danger',
+            message: error.response.data,
+            color: 'negative',
+            position: 'bottom-right',
+          });
+          this.router.push('/');
+        }
         console.log(error);
       }
     },

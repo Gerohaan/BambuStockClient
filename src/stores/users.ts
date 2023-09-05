@@ -4,6 +4,7 @@ import axios from 'axios';
 import { ref } from 'vue';
 import { Notify } from 'quasar';
 import { useQuasar, QSpinnerFacebook } from 'quasar';
+import { useRouter } from 'vue-router';
 
 export const useUsersStore = defineStore('users', {
   state: () => {
@@ -12,6 +13,8 @@ export const useUsersStore = defineStore('users', {
       user: ref(null),
       token: ref(''),
       userToken: ref(''),
+      router: useRouter(),
+
     };
   },
   getters: {},
@@ -29,6 +32,15 @@ export const useUsersStore = defineStore('users', {
         });
         const resp = (this.user = getAll.data);
       } catch (error) {
+        if (error.response.status === 403) {
+          Notify.create({
+            type: 'danger',
+            message: error.response.data,
+            color: 'negative',
+            position: 'bottom-right',
+          });
+          this.router.push('/');
+        }
         console.log(error);
       }
     },
