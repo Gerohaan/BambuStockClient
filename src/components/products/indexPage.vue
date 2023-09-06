@@ -7,29 +7,24 @@
       <q-btn
         icon="add"
         color="primary"
-        @click="openModalAdd()"
         dense
         round
+        :to="{ name: 'productAdd' }"
       ></q-btn>
     </div>
     <div class="col-12">
       <list></list>
     </div>
-    <modal-add v-if="paymentStore.modalAdd"></modal-add>
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import list from 'src/components/payment/listPage.vue';
-import modalAdd from 'src/components/payment/modalAdd.vue';
+import list from 'src/components/products/listPage.vue';
 import { usePaymentStore } from 'src/stores/payment';
 
 const paymentStore = usePaymentStore();
 
-const openModalAdd = () => {
-  paymentStore.manageModal(true);
-};
 onMounted(async () => {
   await paymentStore.paymentAll();
 });
