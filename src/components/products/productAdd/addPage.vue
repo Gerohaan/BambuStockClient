@@ -106,9 +106,10 @@
           <span class="col text-right">
             <q-input
               v-model="filterCat"
-              @change="filterCategory()"
+              debounce="1000"
               label-color="primary"
-              label="Buscar"
+              label="Buscar..."
+              @update:model-value="filterCategory()"
               round
               outlined
               bg-color="grey-2"
@@ -124,7 +125,6 @@
           <q-scroll-area
             :thumb-style="scrollOptions.thumbStyle"
             :content-style="scrollOptions.contentStyle"
-            :content-active-style="scrollOptions.contentActiveStyle"
             style="height: 200px"
           >
             <q-list separator>
@@ -135,7 +135,11 @@
                 v-ripple
               >
                 <q-item-section side top>
-                  <q-checkbox :key="index" v-model="product.categeriSelected" />
+                  <q-checkbox
+                    :id="category.id"
+                    :val="category.nombre_categoria"
+                    v-model="categeriSelected"
+                  />
                 </q-item-section>
 
                 <q-item-section>
@@ -194,9 +198,10 @@
             <q-label>
               {{ store.name }}
               <q-input
-                v-model="store.quantity"
+                :rules="[(val) => (val && val >= 0) || 'Cantidad incorrecta.']"
+                v-model.number="store.quantity"
                 dense
-                mask="##########"
+                type="number"
                 bg-color="grey-2"
                 input-class="text-black"
                 standout
@@ -359,7 +364,8 @@ import { Notify } from 'quasar';
 const storePStore = useStorePStore();
 const unitStore = useUnitStore();
 const categoryStore = useCategoryStore();
-const categories = computed(() => categoryStore.Categoria);
+const categories = ref([]);
+const categeriSelected = ref([]);
 const stores = computed(() => storePStore.store);
 const product = ref({});
 const variableProduct = ref(false);
@@ -397,9 +403,15 @@ const logImg = (param) => {
   fileImage.value = param;
 };
 const filterCategory = () => {
-  console.log('hola');
-
-  categories.value.filter((item) => item.nombre_categoria == filterCat.value);
+  let search = filterCat.value;
+  let expression = new RegExp(`${search}.*`, 'i');
+  let catFilter = categoryStore.Categoria.filter((item) =>
+    expression.test(item.nombre_categoria)
+  );
+  if (filterCat.value.length > 0) {
+    categories.value = categoryStore.Categoria;
+  }
+  categories.value = catFilter;
 };
 onMounted(async () => {
   await categoryStore.CategoriaAll();
@@ -416,5 +428,7 @@ onMounted(async () => {
   storeListNew.map((item) => {
     quantityStores.value.push(item);
   });
+
+  categories.value = categoryStore.Categoria;
 });
 </script>
