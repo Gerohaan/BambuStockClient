@@ -1,7 +1,11 @@
 <template>
   <div class="row q-pa-sm">
     <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-md">
-      <q-card class="text-primary">
+      <q-card
+        class="text-primary"
+        bordered
+        style="border-color: #4caf50; border-radius: 8px"
+      >
         <q-card-section>
           <div class="col">
             <p class="text-h6">Ventas totales</p>
@@ -13,7 +17,11 @@
       </q-card>
     </div>
     <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-md">
-      <q-card class="text-primary">
+      <q-card
+        class="text-primary"
+        bordered
+        style="border-color: #4caf50; border-radius: 8px"
+      >
         <q-card-section class="q-pa-md">
           <div class="col">
             <p class="text-h6">Compras</p>
@@ -25,7 +33,11 @@
       </q-card>
     </div>
     <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-md">
-      <q-card class="text-primary">
+      <q-card
+        class="text-primary"
+        bordered
+        style="border-color: #4caf50; border-radius: 8px"
+      >
         <q-card-section class="q-pa-md">
           <div class="col">
             <p class="text-h6">Utilidades</p>
@@ -39,7 +51,16 @@
   </div>
   <div class="row q-pa-md">
     <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-md">
-      <q-card class="text-primary" style="height: 90%; max-height: 90%">
+      <q-card
+        class="text-primary"
+        bordered
+        style="
+          border-color: #4caf50;
+          border-radius: 8px;
+          height: 90%;
+          max-height: 90%;
+        "
+      >
         <q-card-section>
           <div class="text-h6">Productos más vendidos</div>
           <apexchart
@@ -52,7 +73,16 @@
       </q-card>
     </div>
     <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-md">
-      <q-card class="text-primary" style="height: 90%; max-height: 90%">
+      <q-card
+        class="text-primary"
+        bordered
+        style="
+          border-color: #4caf50;
+          border-radius: 8px;
+          height: 90%;
+          max-height: 90%;
+        "
+      >
         <q-card-section>
           <div class="text-h6">Ventas por mes</div>
           <apexchart
@@ -65,7 +95,16 @@
       </q-card>
     </div>
     <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-md">
-      <q-card class="text-primary" style="height: 90%; max-height: 90%">
+      <q-card
+        class="text-primary"
+        bordered
+        style="
+          border-color: #4caf50;
+          border-radius: 8px;
+          height: 90%;
+          max-height: 90%;
+        "
+      >
         <q-card-section>
           <div class="text-h6">Categorias más vendidas</div>
           <apexchart

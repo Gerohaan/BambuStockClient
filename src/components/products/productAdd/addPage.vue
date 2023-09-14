@@ -13,7 +13,7 @@
           <p class="text-h6">Datos del producto*</p>
         </q-card-section>
         <q-card-section horizontal class="q-pa-md">
-          <q-label class="col q-ma-sm text-subtitle1"
+          <q-label class="col q-ma-sm text-subtitle1 ellipsis"
             >Nombre del producto
             <q-input
               input-class="text-black"
@@ -25,7 +25,7 @@
               color="primary"
             ></q-input>
           </q-label>
-          <q-label class="col q-ma-sm text-subtitle1">
+          <q-label class="col q-ma-sm text-subtitle1 ellipsis">
             Código*
             <q-input
               input-class="text-black"
@@ -37,17 +37,39 @@
               color="primary"
             ></q-input
           ></q-label>
-          <q-label class="col q-ma-sm text-subtitle1"
+          <q-label class="col q-ma-sm text-subtitle1 ellipsis"
             >Unidad de medida
-            <q-input
-              input-class="text-black"
-              v-model="product.name"
-              label="Seleccione unidad de medida"
-              standout
+            <q-select
               bg-color="grey-2"
-              dense
               color="primary"
-            ></q-input>
+              input-class="text-black"
+              :rules="[(val) => !!val || 'Selecciona una opción.']"
+              use-input
+              hide-selected
+              fill-input
+              input-debounce="0"
+              dense
+              v-model="product.unitOfMeasurement"
+              :options="apilista"
+              :option-label="
+                (apilista) =>
+                  apilista === null ? null : apilista.nombre_unidad
+              "
+              :option-value="
+                (apilista) => (apilista === null ? null : apilista.id)
+              "
+              emit-value
+              map-options
+              standout
+            >
+              <template v-slot:no-option>
+                <q-item>
+                  <q-item-section class="text-grey">
+                    Sin resultados
+                  </q-item-section>
+                </q-item>
+              </template>
+            </q-select>
           </q-label>
         </q-card-section>
         <q-card-section horizontal class="q-pa-md">
@@ -71,13 +93,20 @@
     <div class="q-pa-md col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
       <q-card
         bordered
-        style="border-color: #4caf50; border-radius: 8px"
+        style="
+          height: 100%;
+          max-height: 100%;
+          border-color: #4caf50;
+          border-radius: 8px;
+        "
         class="text-primary"
       >
         <q-card-section class="row q-pb-none">
           <span class="col text-left text-h6">Categoría</span>
           <span class="col text-right">
             <q-input
+              v-model="filterCat"
+              @change="filterCategory()"
               label-color="primary"
               label="Buscar"
               round
@@ -90,7 +119,32 @@
             ></q-input>
           </span>
         </q-card-section>
-        <q-card-section horizontal class="q-pa-md"> </q-card-section>
+
+        <q-card-section class="q-pa-md">
+          <q-scroll-area
+            :thumb-style="scrollOptions.thumbStyle"
+            :content-style="scrollOptions.contentStyle"
+            :content-active-style="scrollOptions.contentActiveStyle"
+            style="height: 200px"
+          >
+            <q-list separator>
+              <q-item
+                v-for="(category, index) in categories"
+                :key="index"
+                clickable
+                v-ripple
+              >
+                <q-item-section side top>
+                  <q-checkbox :key="index" v-model="product.categeriSelected" />
+                </q-item-section>
+
+                <q-item-section>
+                  <q-item-label>{{ category.nombre_categoria }}</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-scroll-area>
+        </q-card-section>
       </q-card>
     </div>
   </div>
@@ -102,41 +156,265 @@
         class="text-primary"
       >
         <q-card-section class="q-pb-none">
-          <p class="text-h6">Imágenes del producto</p>
+          <div class="row">
+            <div class="col q-pa-xs">
+              <p class="text-h6">Inventario</p>
+            </div>
+            <div class="col-4 q-pa-xs">
+              <q-label class="ellipsis">
+                Código de barra
+                <q-input
+                  v-model="product.codBar"
+                  dense
+                  bg-color="grey-2"
+                  input-class="text-black"
+                  standout
+                ></q-input>
+              </q-label>
+            </div>
+          </div>
         </q-card-section>
-        <q-card-section horizontal class="q-pa-md"
-          ><q-uploader
-            url="http://localhost:4444/upload"
-            multiple
-            style="max-width: 300px"
-          />
+        <q-card-section horizontal class="q-pl-md q-pr-md">
+          <p>
+            <q-toggle
+              disable
+              v-model="variableProduct"
+              label="Simple"
+              left-label
+            />
+            <span>Variable</span>
+          </p>
+        </q-card-section>
+        <q-card-section horizontal class="q-pl-md q-pr-md q-pb-md">
+          <div
+            v-for="(store, index) in quantityStores"
+            :key="index"
+            class="col q-pa-xs"
+          >
+            <q-label>
+              {{ store.name }}
+              <q-input
+                v-model="store.quantity"
+                dense
+                mask="##########"
+                bg-color="grey-2"
+                input-class="text-black"
+                standout
+              ></q-input>
+            </q-label>
+          </div>
         </q-card-section>
       </q-card>
     </div>
     <div class="q-pa-md col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
       <q-card
         bordered
+        style="
+          height: 100%;
+          max-height: 100%;
+          border-color: #4caf50;
+          border-radius: 8px;
+        "
+        class="text-primary"
+      >
+        <q-card-section horizontal class="q-pa-none">
+          <q-uploader
+            style="
+              border-radius: 8px;
+              position: relative;
+              margin-left: 9%;
+              margin-right: 9%;
+              margin-top: 4%;
+            "
+            url="http://localhost:9000/upload"
+            label="Imagen del producto"
+            accept=".jpg, image/*"
+            v-model="fileImage"
+            hide-upload-btn
+            @rejected="onRejected"
+          >
+            <template v-slot:list="scope">
+              <q-list separator>
+                <q-item v-for="file in scope.files" :key="file.__key">
+                  <q-item-section>
+                    <q-item-label class="full-width ellipsis">
+                      {{ logImg(scope.files) }}
+                      {{ file.name }}
+                    </q-item-label>
+
+                    <!-- <q-item-label caption>
+                      Status: {{ file.__status }}
+                    </q-item-label> -->
+
+                    <q-item-label caption>
+                      {{ file.__sizeLabel }} / {{ file.__progressLabel }}
+                    </q-item-label>
+                  </q-item-section>
+
+                  <q-item-section v-if="file.__img" thumbnail class="gt-xs">
+                    <img :src="file.__img.src" />
+                  </q-item-section>
+
+                  <q-item-section top side>
+                    <q-btn
+                      class="gt-xs"
+                      size="12px"
+                      flat
+                      dense
+                      round
+                      icon="delete"
+                      @click="scope.removeFile(file)"
+                    />
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </template>
+          </q-uploader>
+        </q-card-section>
+      </q-card>
+    </div>
+  </div>
+  <div class="row q-ma-md">
+    <div class="q-pa-md col col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
+      <q-card
+        bordered
         style="border-color: #4caf50; border-radius: 8px"
         class="text-primary"
       >
-        <q-card-section class="row q-pb-none">
-          <span class="col text-left text-h6">Estado</span>
+        <q-card-section class="q-pb-none">
+          <p class="text-h6">Montos</p>
         </q-card-section>
-        <q-card-section horizontal class="q-pa-md"> </q-card-section>
+        <q-card-section horizontal class="q-pt-none q-pl-md q-pr-md q-pb-md">
+          <q-label class="col q-ma-sm text-subtitle1"
+            >Costo
+            <q-input
+              input-class="text-black"
+              v-model="product.name"
+              label="Costo..."
+              standout
+              bg-color="grey-2"
+              dense
+              color="primary"
+            ></q-input>
+          </q-label>
+          <q-label class="col q-ma-sm text-subtitle1"
+            >Impuesto
+            <q-input
+              input-class="text-black"
+              v-model="product.name"
+              label="Impuesto..."
+              standout
+              bg-color="grey-2"
+              dense
+              color="primary"
+            ></q-input>
+          </q-label>
+          <q-label class="col q-ma-sm text-subtitle1"
+            >Precio
+            <q-input
+              input-class="text-black"
+              v-model="product.name"
+              label="Precio..."
+              standout
+              bg-color="grey-2"
+              dense
+              color="primary"
+            ></q-input>
+          </q-label>
+        </q-card-section>
+      </q-card>
+    </div>
+    <div class="q-pa-md col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+      <q-card flat>
+        <q-card-section class="q-pb-none">
+          <div class="q-gutter-md" align="center" style="margin-top: 30%">
+            <q-btn
+              padding="2px 22px 2px 22px"
+              no-caps
+              label="Cancelar"
+              color="primary"
+              outline
+              class=""
+            ></q-btn>
+            <q-btn
+              padding="2px 22px 2px 22px"
+              no-caps
+              label="Registrar"
+              color="primary"
+              class=""
+            ></q-btn>
+          </div>
+        </q-card-section>
       </q-card>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import { usePaymentStore } from 'src/stores/payment';
-
-const paymentStore = usePaymentStore();
-
+import { onMounted, ref, computed } from 'vue';
+import { useCategoryStore } from 'src/stores/category';
+import { useUnitStore } from 'src/stores/unit';
+import { useStorePStore } from 'src/stores/storeP';
+import { Notify } from 'quasar';
+const storePStore = useStorePStore();
+const unitStore = useUnitStore();
+const categoryStore = useCategoryStore();
+const categories = computed(() => categoryStore.Categoria);
+const stores = computed(() => storePStore.store);
 const product = ref({});
+const variableProduct = ref(false);
+const fileImage = ref(null);
+const apilista = computed(() => unitStore.unit);
+const quantityStores = ref([]);
+const filterCat = ref('');
+const scrollOptions = {
+  contentStyle: {
+    backgroundColor: 'rgba(0,0,0,0.02)',
+    color: '#8dbc5c',
+  },
 
+  contentActiveStyle: {
+    backgroundColor: '#eee',
+    color: 'black',
+  },
+
+  thumbStyle: {
+    right: '2px',
+    borderRadius: '5px',
+    backgroundColor: '#8dbc5c',
+    width: '5px',
+    opacity: '0.75',
+  },
+};
+const onRejected = (rejectedEntries) => {
+  Notify.create({
+    type: 'negative',
+    position: 'bottom-right',
+    message: `${rejectedEntries.length} los archivos no pasaron las restricciones de validación`,
+  });
+};
+const logImg = (param) => {
+  fileImage.value = param;
+};
+const filterCategory = () => {
+  console.log('hola');
+
+  categories.value.filter((item) => item.nombre_categoria == filterCat.value);
+};
 onMounted(async () => {
-  await paymentStore.paymentAll();
+  await categoryStore.CategoriaAll();
+  await unitStore.unitAll();
+  await storePStore.storeAll();
+
+  let storeListNew = storePStore.store.map((item) => {
+    return {
+      name: item.nombre_bodega,
+      id: item.id,
+      quantity: 0,
+    };
+  });
+  storeListNew.map((item) => {
+    quantityStores.value.push(item);
+  });
 });
 </script>
