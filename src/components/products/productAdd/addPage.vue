@@ -299,9 +299,10 @@
               <q-input
                 :rules="[(val) => (val && val >= 0) || 'Cantidad incorrecta.']"
                 prefix="$"
-                type="number"
                 input-class="text-black"
                 v-model="coste"
+                mask="#.##"
+                reverse-fill-mask
                 label="Costo..."
                 standout
                 bg-color="grey-2"
@@ -313,7 +314,8 @@
               >M. de ganancia (%)
               <q-input
                 prefix="%"
-                type="number"
+                mask="#.##"
+                reverse-fill-mask
                 input-class="text-black"
                 v-model="marginOfGain"
                 label="Margen de ganancia..."
@@ -327,7 +329,8 @@
               >Impuesto (%)
               <q-input
                 prefix="%"
-                type="number"
+                mask="#.##"
+                reverse-fill-mask
                 input-class="text-black"
                 v-model="tax"
                 label="Impuesto..."
@@ -341,7 +344,8 @@
               >Precio Final
               <q-input
                 prefix="$"
-                type="number"
+                mask="#.##"
+                reverse-fill-mask
                 input-class="text-black"
                 v-model="priceTotalProduct"
                 label="Precio..."
@@ -404,8 +408,8 @@ const tax = ref(12);
 const coste = ref(0);
 const marginOfGain = ref(0);
 const marginOfGainCash = computed(() => {
-  let resultMargin = marginOfGain.value / 100;
-  return coste.value * resultMargin;
+  let resultMargin = parseFloat(marginOfGain.value) / 100;
+  return parseFloat(coste.value) * resultMargin;
 });
 const taxCash = computed(() => {
   let taxResult = tax.value / 100;
@@ -418,6 +422,7 @@ const priceTotalProduct = computed(() => {
     parseFloat(coste.value) +
     parseFloat(marginOfGainCash.value) +
     taxCash.value;
+
   return roundTwoDecimals(total);
 });
 const roundTwoDecimals = (number) => {

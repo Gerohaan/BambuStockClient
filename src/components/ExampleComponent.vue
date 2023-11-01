@@ -134,8 +134,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, inject } from 'vue';
+import { computed, ref, inject, onMounted } from 'vue';
 import { Todo, Meta } from './models';
+
 const swal = inject('$swal');
 interface Props {
   title: string;
