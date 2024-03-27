@@ -298,7 +298,7 @@
               >Costo
               <q-input
                 :rules="[(val) => (val && val >= 0) || 'Cantidad incorrecta.']"
-                prefix="$"
+                prefix="Bs"
                 input-class="text-black"
                 v-model="coste"
                 mask="#.##"
@@ -342,18 +342,20 @@
             </q-label>
             <q-label class="col q-ma-sm text-subtitle1"
               >Precio Final
-              <q-input
-                prefix="$"
-                mask="#.##"
-                reverse-fill-mask
+              <q-field
+                prefix="Bs"
                 input-class="text-black"
-                v-model="priceTotalProduct"
-                label="Precio..."
                 standout
                 bg-color="grey-2"
                 dense
                 color="primary"
-              ></q-input>
+              >
+                <template v-slot:control>
+                  <div class="self-center full-width no-outline" tabindex="0">
+                    {{ priceTotalProduct }}
+                  </div>
+                </template></q-field
+              >
             </q-label>
           </q-card-section>
         </q-card>
@@ -387,7 +389,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref, computed, watch } from 'vue';
 import { useCategoryStore } from 'src/stores/category';
 import { useUnitStore } from 'src/stores/unit';
 import { useStorePStore } from 'src/stores/storeP';
@@ -404,7 +406,7 @@ const fileImage = ref(null);
 const apilista = computed(() => unitStore.unit);
 const quantityStores = ref([]);
 const filterCat = ref('');
-const tax = ref(12);
+const tax = ref(16);
 const coste = ref(0);
 const marginOfGain = ref(0);
 const marginOfGainCash = computed(() => {
@@ -486,5 +488,15 @@ onMounted(async () => {
   });
 
   categories.value = categoryStore.Categoria;
+});
+watch(marginOfGain, (newValue, oldValue) => {
+  if (typeof newValue === 'string' && newValue.length === 0) {
+    marginOfGain.value = 0;
+  }
+});
+watch(tax, (newValue, oldValue) => {
+  if (typeof newValue === 'string' && newValue.length === 0) {
+    tax.value = 0;
+  }
 });
 </script>
