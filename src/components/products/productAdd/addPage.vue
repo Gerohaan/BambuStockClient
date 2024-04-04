@@ -1,5 +1,5 @@
 <template>
-  <q-form>
+  <q-form @submit.prevent="productSend()">
     <div class="row q-ma-md">
       <div class="col-12 q-pa-sm">
         <p class="text-h5 text-primary">Crear nuevo producto</p>
@@ -472,6 +472,11 @@ const filterCategory = () => {
   }
   categories.value = catFilter;
 };
+
+const productSend = () => {
+  console.log(product.value);
+};
+
 onMounted(async () => {
   await categoryStore.CategoriaAll();
   await unitStore.unitAll();
