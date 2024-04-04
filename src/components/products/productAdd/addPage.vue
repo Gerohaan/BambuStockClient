@@ -201,7 +201,8 @@
                 {{ store.name }}
                 <q-input
                   :rules="[
-                    (val) => (val && val >= 0) || 'Cantidad incorrecta.',
+                    (val) =>
+                      (val && val > 0) || val == 0 || 'Cantidad incorrecta.',
                   ]"
                   v-model.number="store.quantity"
                   dense
