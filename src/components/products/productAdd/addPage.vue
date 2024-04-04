@@ -475,6 +475,14 @@ const filterCategory = () => {
 
 const productSend = () => {
   console.log(product.value);
+  console.log(fileImage.value);
+  console.log(categeriSelected.value);
+  console.log(tax.value);
+  console.log(coste.value);
+  console.log(marginOfGain.value);
+  console.log(marginOfGainCash);
+  console.log(taxCash);
+  console.log(priceTotalProduct);
 };
 
 onMounted(async () => {
