@@ -228,6 +228,9 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({
+  name: 'listPage',
+});
 import { computed, ref, inject, onMounted } from 'vue';
 import { Notify } from 'quasar';
 import { usePaymentStore } from 'src/stores/payment';

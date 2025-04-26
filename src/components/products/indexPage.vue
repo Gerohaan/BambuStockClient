@@ -19,6 +19,9 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({
+  name: 'IndexPage',
+});
 import { onMounted } from 'vue';
 import list from 'src/components/products/listPage.vue';
 import { usePaymentStore } from 'src/stores/payment';

@@ -423,6 +423,9 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({
+  name: 'mainLayout',
+});
 import { ref, onMounted, inject } from 'vue';
 import { useUsersStore } from 'src/stores/users';
 import { useRouter } from 'vue-router';

@@ -25,7 +25,7 @@
           <q-input
             v-model="nameUnit"
             lazy-rules
-            :rules="[val => (val && val.length > 0) || 'Campo requerido']"
+            :rules="[(val) => (val && val.length > 0) || 'Campo requerido']"
             class="col-4 q-pa-sm"
             input-class="text-black"
             dense
@@ -37,7 +37,7 @@
           <q-input
             v-model="descriptionUnit"
             lazy-rules
-            :rules="[val => (val && val.length > 0) || 'Campo requerido']"
+            :rules="[(val) => (val && val.length > 0) || 'Campo requerido']"
             class="col-4 q-pa-sm"
             input-class="text-black"
             dense
@@ -51,7 +51,7 @@
             min="0"
             type="number"
             lazy-rules
-            :rules="[val => (val && val.length > 0) || 'Campo requerido']"
+            :rules="[(val) => (val && val.length > 0) || 'Campo requerido']"
             class="col-4 q-pa-sm"
             input-class="text-black"
             dense
@@ -77,6 +77,9 @@
   </q-dialog>
 </template>
 <script lang="ts" setup>
+defineOptions({
+  name: 'modalAdd',
+});
 import { ref, onMounted } from 'vue';
 import { useUnitStore } from 'src/stores/unit';
 import { useConfigUserStore } from 'src/stores/configUser';
@@ -98,7 +101,7 @@ const addUnit = async () => {
     nombre_unidad: nameUnit,
     descripcion_unidad: descriptionUnit,
     cantidad_unidad: cantidadUnit,
-    status_unidad: statusUnit
+    status_unidad: statusUnit,
   });
   if (unitStore.modalEdit) {
     await unitStore
@@ -107,7 +110,7 @@ const addUnit = async () => {
         unitStore.manageModal(false);
         unitStore.unitAll();
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   } else {
@@ -117,7 +120,7 @@ const addUnit = async () => {
         unitStore.manageModal(false);
         unitStore.unitAll();
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   }

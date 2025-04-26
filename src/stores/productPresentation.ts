@@ -14,7 +14,11 @@ export const useProductPresentationStore = defineStore('presentation', {
       presentation: ref([]),
     };
   },
-  getters: {},
+  getters: {
+    getPresentation(state) {
+      return state.presentation;
+    },
+  },
   actions: {
     manageModal(param = true, edit = false, row = {}) {
       if (edit) {
@@ -137,13 +141,16 @@ export const useProductPresentationStore = defineStore('presentation', {
 
         const token = localStorage.getItem('token') || '';
         const newToken = token.replace('"', ' ');
-        const list = await axios.get(Global.url + 'presentacion/show/' + `${id}`, {
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Content-type': 'Application/json',
-            Authorization: 'Bearer ' + newToken,
-          },
-        });
+        const list = await axios.get(
+          Global.url + 'presentacion/show/' + `${id}`,
+          {
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Content-type': 'Application/json',
+              Authorization: 'Bearer ' + newToken,
+            },
+          }
+        );
         const respu = (this.presentationId = list.data);
       } catch (error) {
         console.log(error);

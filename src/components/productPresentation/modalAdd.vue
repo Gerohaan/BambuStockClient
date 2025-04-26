@@ -113,6 +113,9 @@
   </q-dialog>
 </template>
 <script lang="ts" setup>
+defineOptions({
+  name: 'modalAdd',
+});
 import { ref, onMounted, computed } from 'vue';
 import { useProductPresentationStore } from 'src/stores/productPresentation';
 import { useConfigUserStore } from 'src/stores/configUser';

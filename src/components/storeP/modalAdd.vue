@@ -23,7 +23,7 @@
           <q-input
             v-model="nameStore"
             lazy-rules
-            :rules="[val => (val && val.length > 0) || 'Campo requerido']"
+            :rules="[(val) => (val && val.length > 0) || 'Campo requerido']"
             class="col-4 q-pa-sm"
             input-class="text-black"
             dense
@@ -35,7 +35,7 @@
           <q-input
             v-model="descriptionStore"
             lazy-rules
-            :rules="[val => (val && val.length > 0) || 'Campo requerido']"
+            :rules="[(val) => (val && val.length > 0) || 'Campo requerido']"
             class="col-4 q-pa-sm"
             input-class="text-black"
             dense
@@ -47,7 +47,7 @@
           <q-input
             v-model="ubicacionStore"
             lazy-rules
-            :rules="[val => (val && val.length > 0) || 'Campo requerido']"
+            :rules="[(val) => (val && val.length > 0) || 'Campo requerido']"
             class="col-4 q-pa-sm"
             input-class="text-black"
             dense
@@ -73,6 +73,9 @@
   </q-dialog>
 </template>
 <script lang="ts" setup>
+defineOptions({
+  name: 'modalAdd',
+});
 import { ref, onMounted } from 'vue';
 import { useStorePStore } from 'src/stores/storeP';
 import { useConfigUserStore } from 'src/stores/configUser';
@@ -96,7 +99,7 @@ const addStore = async () => {
     nombre_bodega: nameStore,
     ubicacion_bodega: ubicacionStore,
     status_bodega: statusStore,
-    descripcion_bodega: descriptionStore
+    descripcion_bodega: descriptionStore,
   });
   if (storeStore.modalEdit) {
     await storeStore
@@ -105,7 +108,7 @@ const addStore = async () => {
         storeStore.manageModal(false);
         storeStore.storeAll();
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   } else {
@@ -115,7 +118,7 @@ const addStore = async () => {
         storeStore.manageModal(false);
         storeStore.storeAll();
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   }

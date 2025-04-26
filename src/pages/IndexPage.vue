@@ -78,6 +78,9 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({
+  name: 'IndexPage',
+});
 import { ref } from 'vue';
 import { useUsersStore } from 'src/stores/users';
 const usersStore = useUsersStore();

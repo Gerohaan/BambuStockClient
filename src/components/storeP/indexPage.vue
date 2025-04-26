@@ -20,6 +20,9 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({
+  name: 'indexPage',
+});
 import { computed, ref, inject, onMounted } from 'vue';
 import list from 'src/components/storeP/listPage.vue';
 import modalAdd from 'src/components/storeP/modalAdd.vue';

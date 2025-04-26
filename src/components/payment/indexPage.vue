@@ -20,6 +20,9 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({
+  name: 'IndexPage',
+});
 import { onMounted } from 'vue';
 import list from 'src/components/payment/listPage.vue';
 import modalAdd from 'src/components/payment/modalAdd.vue';

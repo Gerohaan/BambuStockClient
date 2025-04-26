@@ -1,5 +1,5 @@
 <template>
-  <q-form>
+  <q-form @submit.prevent="onSubmit">
     <div class="row q-ma-md">
       <div class="col-12 q-pa-sm">
         <p class="text-h5 text-primary">Crear nuevo producto</p>
@@ -40,8 +40,45 @@
               ></q-input
             ></q-label>
             <q-label class="col q-ma-sm text-subtitle1 ellipsis"
-              >Unidad de medida*
+              ><!-- Unidad de medida* -->
+              Presentación*
               <q-select
+                bg-color="grey-2"
+                color="primary"
+                input-class="text-black"
+                :rules="[(val) => !!val || 'Selecciona una opción.']"
+                use-input
+                hide-selected
+                fill-input
+                input-debounce="0"
+                dense
+                v-model="product.presentation"
+                :options="presentationProductList"
+                :option-label="
+                  (presentationProductList) =>
+                    presentationProductList === null
+                      ? null
+                      : presentationProductList.nombre_present
+                "
+                :option-value="
+                  (presentationProductList) =>
+                    presentationProductList === null
+                      ? null
+                      : presentationProductList.id
+                "
+                emit-value
+                map-options
+                standout
+              >
+                <template v-slot:no-option>
+                  <q-item>
+                    <q-item-section class="text-grey">
+                      Sin resultados
+                    </q-item-section>
+                  </q-item>
+                </template>
+              </q-select>
+              <!-- <q-select
                 bg-color="grey-2"
                 color="primary"
                 input-class="text-black"
@@ -71,7 +108,7 @@
                     </q-item-section>
                   </q-item>
                 </template>
-              </q-select>
+              </q-select> -->
             </q-label>
           </q-card-section>
           <q-card-section horizontal class="q-pa-md">
@@ -164,7 +201,7 @@
           <q-card-section class="q-pb-none">
             <div class="row">
               <div class="col q-pa-xs">
-                <p class="text-h6">Inventario</p>
+                <p class="text-h6">Inventario en bodegas</p>
               </div>
               <div class="col-4 q-pa-xs">
                 <!-- <q-label class="ellipsis">
@@ -385,15 +422,19 @@
     </div>
   </q-form>
 </template>
-
 <script setup lang="ts">
+defineOptions({
+  name: 'addPage',
+});
 import { onMounted, ref, computed } from 'vue';
 import { useCategoryStore } from 'src/stores/category';
 import { useUnitStore } from 'src/stores/unit';
+import { useProductPresentationStore } from 'src/stores/productPresentation';
 import { useStorePStore } from 'src/stores/storeP';
 import { Notify } from 'quasar';
 const storePStore = useStorePStore();
 const unitStore = useUnitStore();
+const productPresentationStore = useProductPresentationStore();
 const categoryStore = useCategoryStore();
 const categories = ref([]);
 const categeriSelected = ref([]);
@@ -411,6 +452,7 @@ const marginOfGainCash = computed(() => {
   let resultMargin = parseFloat(marginOfGain.value) / 100;
   return parseFloat(coste.value) * resultMargin;
 });
+const presentationProductList = ref([]);
 const taxCash = computed(() => {
   let taxResult = tax.value / 100;
   let totalPrice = parseFloat(coste.value) + parseFloat(marginOfGainCash.value);
@@ -469,11 +511,17 @@ const filterCategory = () => {
   }
   categories.value = catFilter;
 };
+
+const onSubmit = async () => {
+  product.value.categories = categeriSelected.value;
+  product.value.quantityStores = quantityStores.value;
+  console.log(product.value);
+};
 onMounted(async () => {
   await categoryStore.CategoriaAll();
   await unitStore.unitAll();
   await storePStore.storeAll();
-
+  await productPresentationStore.presentationAll();
   let storeListNew = storePStore.store.map((item) => {
     return {
       name: item.nombre_bodega,
@@ -486,5 +534,6 @@ onMounted(async () => {
   });
 
   categories.value = categoryStore.Categoria;
+  presentationProductList.value = productPresentationStore.getPresentation;
 });
 </script>

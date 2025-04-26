@@ -25,7 +25,7 @@
           <q-input
             v-model="namePayment"
             lazy-rules
-            :rules="[val => (val && val.length > 0) || 'Campo requerido']"
+            :rules="[(val) => (val && val.length > 0) || 'Campo requerido']"
             class="col-6 q-pa-sm"
             input-class="text-black"
             dense
@@ -37,7 +37,7 @@
           <q-input
             v-model="descriptionPayment"
             lazy-rules
-            :rules="[val => (val && val.length > 0) || 'Campo requerido']"
+            :rules="[(val) => (val && val.length > 0) || 'Campo requerido']"
             class="col-6 q-pa-sm"
             input-class="text-black"
             dense
@@ -63,6 +63,9 @@
   </q-dialog>
 </template>
 <script lang="ts" setup>
+defineOptions({
+  name: 'modalAdd',
+});
 import { ref, onMounted } from 'vue';
 import { usePaymentStore } from 'src/stores/payment';
 import { useConfigUserStore } from 'src/stores/configUser';
@@ -83,7 +86,7 @@ const addPayment = async () => {
   const params = ref({
     nombre_pago: namePayment,
     descripcion_pago: descriptionPayment,
-    status_pago: statusPayment
+    status_pago: statusPayment,
   });
   if (paymentStore.modalEdit) {
     await paymentStore
@@ -92,7 +95,7 @@ const addPayment = async () => {
         paymentStore.manageModal(false);
         paymentStore.paymentAll();
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   } else {
@@ -102,7 +105,7 @@ const addPayment = async () => {
         paymentStore.manageModal(false);
         paymentStore.paymentAll();
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   }
