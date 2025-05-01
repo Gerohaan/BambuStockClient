@@ -117,7 +117,76 @@
       </q-card>
     </div>
   </div>
-
+  <div class="row justify-end">
+    <div class="col q-ml-lg">
+      <q-btn
+        color="primary"
+        rounded
+        style="border-radius: 6px"
+        icon="refresh"
+        label="Actualizar"
+        no-caps
+        class="q-px-sm"
+        @click="getDollarAll()"
+      />
+    </div>
+  </div>
+  <div class="row q-pa-sm">
+    <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-md">
+      <q-card
+        class="text-primary"
+        bordered
+        style="border-color: #4caf50; border-radius: 8px"
+      >
+        <q-card-section>
+          <div class="col">
+            <p class="text-h6">Dolar BCV</p>
+          </div>
+          <div class="col text-right">
+            <q-spinner color="primary" v-if="loadinggetDollar" size="3em" />
+            <p v-else class="text-h3">{{ dataDollar.bcv }} Bs.</p>
+          </div>
+        </q-card-section>
+      </q-card>
+    </div>
+    <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-md">
+      <q-card
+        class="text-primary"
+        bordered
+        style="border-color: #4caf50; border-radius: 8px"
+      >
+        <q-card-section class="q-pa-md">
+          <div class="col">
+            <p class="text-h6">Dolar promedio</p>
+          </div>
+          <div class="col text-right">
+            <q-spinner color="primary" v-if="loadinggetDollar" size="3em" />
+            <p class="text-h3" v-else>
+              {{ dataDollar.promedio }}
+              Bs.
+            </p>
+          </div>
+        </q-card-section>
+      </q-card>
+    </div>
+    <div class="col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-md">
+      <q-card
+        class="text-primary"
+        bordered
+        style="border-color: #4caf50; border-radius: 8px"
+      >
+        <q-card-section class="q-pa-md">
+          <div class="col">
+            <p class="text-h6">Dolar Paralelo</p>
+          </div>
+          <div class="col text-right">
+            <q-spinner color="primary" v-if="loadinggetDollar" size="3em" />
+            <p class="text-h3" v-else>{{ dataDollar.paralelo }} Bs.</p>
+          </div>
+        </q-card-section>
+      </q-card>
+    </div>
+  </div>
   <!--  <div>
     <p>
       <button @click="showAlert">Hello world</button>
@@ -134,8 +203,13 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({
+  name: 'exampleComponent',
+});
 import { computed, ref, inject, onMounted } from 'vue';
 import { Todo, Meta } from './models';
+import { useUtilsDollarStore } from 'src/stores/utilsDollar';
+const utilsDollarStore = useUtilsDollarStore();
 
 const swal = inject('$swal');
 interface Props {
@@ -259,4 +333,31 @@ function increment() {
 }
 
 const todoCount = computed(() => props.todos.length);
+const dataDollar = ref({
+  bcv: null,
+  promedio: null,
+  paralelo: null,
+});
+const loadinggetDollar = ref(false);
+const getDollarAll = async () => {
+  try {
+    loadinggetDollar.value = true;
+    await utilsDollarStore.getCambio();
+    loadinggetDollar.value = false;
+  } catch (error) {
+    loadinggetDollar.value = false;
+    throw error;
+  }
+};
+onMounted(async () => {
+  await getDollarAll();
+  const dollarGet = utilsDollarStore.getterCambio;
+  dataDollar.value.bcv = dollarGet?.monitors?.bcv?.price;
+  dataDollar.value.promedio = (
+    (dollarGet?.monitors?.bcv?.price +
+      dollarGet?.monitors?.enparalelovzla?.price) /
+    2
+  ).toFixed(2);
+  dataDollar.value.paralelo = dollarGet?.monitors?.enparalelovzla?.price;
+});
 </script>
