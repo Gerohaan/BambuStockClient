@@ -126,7 +126,17 @@
         icon="refresh"
         label="Actualizar"
         no-caps
-        class="q-px-sm"
+        class="q-px-sm q-ma-sm"
+        @click="getDollarAll()"
+      />
+      <q-btn
+        color="primary"
+        rounded
+        style="border-radius: 6px"
+        icon="refresh"
+        label="Actualizar y guardar"
+        no-caps
+        class="q-px-sm q-ma-sm"
         @click="getDollarAll()"
       />
     </div>
