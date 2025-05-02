@@ -137,7 +137,7 @@
         label="Actualizar y guardar"
         no-caps
         class="q-px-sm q-ma-sm"
-        @click="getDollarAll()"
+        @click="confirmSaveDollars()"
       />
     </div>
   </div>
@@ -353,21 +353,48 @@ const getDollarAll = async () => {
   try {
     loadinggetDollar.value = true;
     await utilsDollarStore.getCambio();
+    const dollarGet = utilsDollarStore.getterCambio;
+    dataDollar.value.bcv = dollarGet?.monitors?.bcv?.price;
+    dataDollar.value.promedio = (
+      (dollarGet?.monitors?.bcv?.price +
+        dollarGet?.monitors?.enparalelovzla?.price) /
+      2
+    ).toFixed(2);
+    dataDollar.value.paralelo = dollarGet?.monitors?.enparalelovzla?.price;
     loadinggetDollar.value = false;
   } catch (error) {
     loadinggetDollar.value = false;
     throw error;
   }
 };
+const getDollarAllAndSave = async () => {
+  try {
+    await getDollarAll();
+    await utilsDollarStore.saveDollarAll(dataDollar.value);
+  } catch (error) {
+    loadinggetDollar.value = false;
+    throw error;
+  }
+};
+const confirmSaveDollars = () => {
+  swal
+    .fire({
+      title: '¿Confirma esta acción?',
+      text: 'Almacena los datos de las tasas de cambio en su base de datos.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#8dbc5c',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, guardar!',
+      cancelButtonText: 'Cancelar',
+    })
+    .then((result) => {
+      if (result.isConfirmed) {
+        getDollarAllAndSave();
+      }
+    });
+};
 onMounted(async () => {
   await getDollarAll();
-  const dollarGet = utilsDollarStore.getterCambio;
-  dataDollar.value.bcv = dollarGet?.monitors?.bcv?.price;
-  dataDollar.value.promedio = (
-    (dollarGet?.monitors?.bcv?.price +
-      dollarGet?.monitors?.enparalelovzla?.price) /
-    2
-  ).toFixed(2);
-  dataDollar.value.paralelo = dollarGet?.monitors?.enparalelovzla?.price;
 });
 </script>

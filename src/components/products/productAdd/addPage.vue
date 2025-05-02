@@ -321,7 +321,7 @@
       </div>
     </div>
     <div class="row q-ma-md">
-      <div class="q-pa-md col col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
+      <div class="q-pa-md col-12">
         <q-card
           bordered
           style="border-color: #4caf50; border-radius: 8px"
@@ -393,12 +393,65 @@
               ></q-input>
             </q-label>
           </q-card-section>
+          <q-card-section horizontal class="q-pt-none q-pl-md q-pr-md q-pb-md">
+            <q-label class="col q-ma-sm text-subtitle1"
+              >BCV ({{ utilsDollarStore.getterDollarFindOne.precio_bcv }}
+              Bs)
+              <q-input
+                prefix="Bs"
+                reverse-fill-mask
+                input-class="text-black"
+                v-model="priceBsBCV"
+                label="Precio..."
+                standout
+                bg-color="grey-2"
+                dense
+                color="primary"
+              ></q-input>
+            </q-label>
+            <q-label class="col q-ma-sm text-subtitle1"
+              >Promedio ({{
+                utilsDollarStore.getterDollarFindOne.precio_promedio
+              }}
+              Bs)
+              <q-input
+                prefix="Bs"
+                reverse-fill-mask
+                input-class="text-black"
+                v-model="priceBsPromedio"
+                label="Precio..."
+                standout
+                bg-color="grey-2"
+                dense
+                color="primary"
+              ></q-input>
+            </q-label>
+            <q-label class="col q-ma-sm text-subtitle1"
+              >Paralelo ({{
+                utilsDollarStore.getterDollarFindOne.precio_paralelo
+              }}
+              Bs)
+              <q-input
+                prefix="Bs"
+                reverse-fill-mask
+                input-class="text-black"
+                v-model="priceBsParalelo"
+                label="Precio..."
+                standout
+                bg-color="grey-2"
+                dense
+                color="primary"
+              ></q-input>
+            </q-label>
+          </q-card-section>
         </q-card>
       </div>
-      <div class="q-pa-md col col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+    </div>
+    <div class="row q-ma-md justify-end">
+      <div class="q-pa-md col-12">
         <q-card flat>
           <q-card-section class="q-pb-none">
-            <div class="q-gutter-md" align="center" style="margin-top: 30%">
+            <div class="q-gutter-md" align="right" style="">
               <q-btn
                 padding="2px 22px 2px 22px"
                 no-caps
@@ -431,11 +484,14 @@ import { useCategoryStore } from 'src/stores/category';
 import { useUnitStore } from 'src/stores/unit';
 import { useProductPresentationStore } from 'src/stores/productPresentation';
 import { useStorePStore } from 'src/stores/storeP';
+import { useUtilsDollarStore } from 'src/stores/utilsDollar';
 import { Notify } from 'quasar';
 const storePStore = useStorePStore();
 const unitStore = useUnitStore();
 const productPresentationStore = useProductPresentationStore();
 const categoryStore = useCategoryStore();
+const utilsDollarStore = useUtilsDollarStore();
+const dollarsFindOne = ref({});
 const categories = ref([]);
 const categeriSelected = ref([]);
 const stores = computed(() => storePStore.store);
@@ -466,6 +522,27 @@ const priceTotalProduct = computed(() => {
     taxCash.value;
 
   return roundTwoDecimals(total);
+});
+const priceBsBCV = computed(() => {
+  let total =
+    parseFloat(priceTotalProduct.value) *
+    parseFloat(utilsDollarStore.getterDollarFindOne.precio_bcv);
+
+  return roundTwoDecimals(total) ?? 0;
+});
+const priceBsPromedio = computed(() => {
+  let total =
+    parseFloat(priceTotalProduct.value) *
+    parseFloat(utilsDollarStore.getterDollarFindOne.precio_promedio);
+
+  return roundTwoDecimals(total) ?? 0;
+});
+const priceBsParalelo = computed(() => {
+  let total =
+    parseFloat(priceTotalProduct.value) *
+    parseFloat(utilsDollarStore.getterDollarFindOne.precio_paralelo);
+
+  return roundTwoDecimals(total) ?? 0;
 });
 const roundTwoDecimals = (number) => {
   return Math.round(number * 100) / 100;
@@ -522,6 +599,7 @@ onMounted(async () => {
   await unitStore.unitAll();
   await storePStore.storeAll();
   await productPresentationStore.presentationAll();
+  await utilsDollarStore.getDollarFindOne();
   let storeListNew = storePStore.store.map((item) => {
     return {
       name: item.nombre_bodega,
