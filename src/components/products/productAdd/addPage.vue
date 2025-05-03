@@ -485,12 +485,14 @@ import { useUnitStore } from 'src/stores/unit';
 import { useProductPresentationStore } from 'src/stores/productPresentation';
 import { useStorePStore } from 'src/stores/storeP';
 import { useUtilsDollarStore } from 'src/stores/utilsDollar';
+import { useProductStore } from 'src/stores/products';
 import { Notify } from 'quasar';
 const storePStore = useStorePStore();
 const unitStore = useUnitStore();
 const productPresentationStore = useProductPresentationStore();
 const categoryStore = useCategoryStore();
 const utilsDollarStore = useUtilsDollarStore();
+const productsStore = useProductStore();
 const dollarsFindOne = ref({});
 const categories = ref([]);
 const categeriSelected = ref([]);
@@ -501,7 +503,7 @@ const fileImage = ref(null);
 const apilista = computed(() => unitStore.unit);
 const quantityStores = ref([]);
 const filterCat = ref('');
-const tax = ref(12);
+const tax = ref(0);
 const coste = ref(0);
 const marginOfGain = ref(0);
 const marginOfGainCash = computed(() => {
@@ -592,7 +594,25 @@ const filterCategory = () => {
 const onSubmit = async () => {
   product.value.categories = categeriSelected.value;
   product.value.quantityStores = quantityStores.value;
-  console.log(product.value);
+  const payloadCreate = {
+    nombre_prod: product.value.name,
+    descripcion_prod: product.value.description,
+    costo_prod: parseFloat(coste.value),
+    precio_prod: priceTotalProduct.value,
+    codigo_prod: product.value.codBar,
+    impuesto_prod: tax.value,
+    utilidad_prod: marginOfGain.value,
+    categoria: categeriSelected.value,
+    presentacionProdId: product.value.presentation,
+    precio_bcv: priceBsBCV.value,
+    precio_promedio: priceBsPromedio.value,
+    precio_paralelo: priceBsParalelo.value,
+  };
+  try {
+    await productsStore.productAdd(payloadCreate);
+  } catch (error) {
+    throw error;
+  }
 };
 onMounted(async () => {
   await categoryStore.CategoriaAll();

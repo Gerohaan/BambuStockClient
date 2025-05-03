@@ -3,12 +3,11 @@
     <div class="col-12 q-pa-md">
       <q-table
         class="text-weight-regular"
-        :rows="payment"
+        :rows="products"
         :columns="columns"
         row-key="id"
         :filter="filter"
         :selected-rows-label="getSelectedString"
-        selection="multiple"
         v-model:selected="selected"
       >
         <template v-slot:top>
@@ -235,14 +234,16 @@ import { computed, ref, inject, onMounted } from 'vue';
 import { Notify } from 'quasar';
 import { usePaymentStore } from 'src/stores/payment';
 import { useCategoryStore } from 'src/stores/category';
+import { useProductStore } from 'src/stores/products';
 
 const categoryStore = useCategoryStore();
 const swal = inject('$swal');
 const categorySelected = ref({});
 const paymentStore = usePaymentStore();
+const productsStore = useProductStore();
 const filter = ref('');
 const selected = ref([]);
-const payment = computed(() => paymentStore.payment);
+const products = computed(() => productsStore.getProductAll);
 const categoriesList = computed(() => categoryStore.Categoria);
 
 const statusOption = [
@@ -258,56 +259,101 @@ const statusOption = [
 
 const columns = [
   {
-    name: 'codeProduct',
+    name: 'codigo_prod',
     required: true,
     label: 'Código',
     align: 'left',
-    field: (row) => row.nombre_pago,
+    field: (row) => row.codigo_prod,
     format: (val) => `${val}`,
     sortable: true,
   },
   {
-    name: 'name',
+    name: 'descripcion_prod',
     required: true,
-    label: 'Producto',
+    label: 'Descripción',
     align: 'left',
-    field: (row) => row.nombre_pago,
+    field: (row) => row.descripcion_prod,
     format: (val) => `${val}`,
     sortable: true,
   },
   {
-    name: 'cost',
+    name: 'costo_prod',
     required: true,
     label: 'Costo',
     align: 'left',
-    field: (row) => row.nombre_pago,
+    field: (row) => row.costo_prod,
     format: (val) => `${val}`,
     sortable: true,
   },
   {
-    name: 'price',
+    name: 'precio_prod',
     required: true,
     label: 'Precio',
     align: 'left',
-    field: (row) => row.nombre_pago,
+    field: (row) => row.precio_prod,
     format: (val) => `${val}`,
     sortable: true,
   },
   {
-    name: 'inventory',
+    name: 'impuesto_prod',
     required: true,
-    label: 'Inventario',
+    label: 'Impuesto',
     align: 'left',
-    field: (row) => row.nombre_pago,
+    field: (row) => row.impuesto_prod,
     format: (val) => `${val}`,
     sortable: true,
   },
   {
-    name: 'status',
+    name: 'utilidad_prod',
     required: true,
-    label: 'Estado',
+    label: 'Utilidad',
     align: 'left',
-    field: (row) => row.nombre_pago,
+    field: (row) => row.utilidad_prod,
+    format: (val) => `${val}`,
+    sortable: true,
+  },
+  {
+    name: 'categoria',
+    required: true,
+    label: 'Categoria',
+    align: 'left',
+    field: (row) => row.categoria,
+    format: (val) => `${val}`,
+    sortable: true,
+  },
+  {
+    name: 'precio_bcv',
+    required: true,
+    label: 'Precio BCV',
+    align: 'left',
+    field: (row) => row.precio_bcv,
+    format: (val) => `${val}`,
+    sortable: true,
+  },
+  {
+    name: 'precio_promedio',
+    required: true,
+    label: 'Precio Promedio',
+    align: 'left',
+    field: (row) => row.precio_promedio,
+    format: (val) => `${val}`,
+    sortable: true,
+  },
+  {
+    name: 'precio_paralelo',
+    required: true,
+    label: 'Precio Paralelo',
+    align: 'left',
+    field: (row) => row.precio_paralelo,
+    format: (val) => `${val}`,
+    sortable: true,
+  },
+  {
+    name: 'PresentacionProd',
+    required: true,
+    label: 'Presentación',
+    align: 'left',
+    field: (row) => row.PresentacionProd.nombre_present,
     format: (val) => `${val}`,
     sortable: true,
   },
@@ -362,6 +408,7 @@ const deletePayment = async (id = 1) => {
   await paymentStore.paymentAll();
 };
 onMounted(async () => {
-  categoryStore.CategoriaAll();
+  await productsStore.productsGet();
+  console.log(productsStore.getProductAll);
 });
 </script>
