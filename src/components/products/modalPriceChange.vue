@@ -83,6 +83,9 @@
   </q-dialog>
 </template>
 <script lang="ts" setup>
+defineOptions({
+  name: 'modalPriceChange',
+});
 import { ref, onMounted, computed, inject } from 'vue';
 import { useUtilsDollarStore } from 'src/stores/utilsDollar';
 import { useProductStore } from 'src/stores/products';
