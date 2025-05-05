@@ -10,6 +10,7 @@ export const useUtilsDollarStore = defineStore('utilsDollar', {
     return {
       dataDollar: ref({}),
       dollarFindOne: ref({}),
+      modalChangePrices: ref(false),
     };
   },
   getters: {
@@ -19,8 +20,14 @@ export const useUtilsDollarStore = defineStore('utilsDollar', {
     getterDollarFindOne(state) {
       return state.dollarFindOne;
     },
+    getterModalChangePrices(state) {
+      return state.modalChangePrices;
+    },
   },
   actions: {
+    adminModalChange(param = true) {
+      this.modalChangePrices = param;
+    },
     async getCambio() {
       try {
         const getAll = await axios.get(apiDolar + '/dollar?page=alcambio');

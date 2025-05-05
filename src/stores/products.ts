@@ -3,13 +3,16 @@ import { Global, Headers } from 'src/config/Global';
 import axios from 'axios';
 import { ref } from 'vue';
 import { Notify } from 'quasar';
-import { useQuasar, QSpinnerFacebook } from 'quasar';
+import { useQuasar, QSpinnerFacebook, QSpinnerDots } from 'quasar';
+
+//const $q = useQuasar();
 
 export const useProductStore = defineStore('products', {
   state: () => {
     return {
       newProduct: ref({}),
       listProduct: ref([]),
+      q: useQuasar(),
     };
   },
   getters: {
@@ -60,6 +63,50 @@ export const useProductStore = defineStore('products', {
         this.listProduct = getAll.data;
       } catch (error) {
         console.log(error);
+      }
+    },
+    async changePricesProductsAll(params = {}) {
+      try {
+        this.q.loading.show({
+          spinner: QSpinnerDots,
+          spinnerColor: 'primary',
+          spinnerSize: 110,
+          backgroundColor: 'secondary',
+          message: '',
+          messageColor: 'black',
+        });
+        const token = localStorage.getItem('token') || '';
+        const newToken = token.replace('"', ' ');
+        const getAll = await axios.post(
+          Global.url + 'producto/changePrices',
+          params,
+          {
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Content-type': 'Application/json',
+              Authorization: 'Bearer ' + newToken,
+            },
+          }
+        );
+
+        if (getAll.status === 200) {
+          Notify.create({
+            type: 'positive',
+            message: 'Precios ajustados',
+            color: 'positive',
+            position: 'bottom-right',
+          });
+        }
+        this.q.loading.hide();
+      } catch (error) {
+        Notify.create({
+          type: 'warning',
+          message: 'Error con el Servidor',
+          color: 'warning',
+          position: 'bottom-right',
+        });
+        console.log(error);
+        this.q.loading.hide();
       }
     },
   },

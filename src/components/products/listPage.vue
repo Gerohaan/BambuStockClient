@@ -5,7 +5,7 @@
         class="text-weight-regular"
         :rows="products"
         :columns="columns"
-        row-key="id"
+        row-key="codigo_prod"
         :filter="filter"
         :selected-rows-label="getSelectedString"
         v-model:selected="selected"
@@ -26,7 +26,7 @@
               label="Acciones Generales"
             >
               <q-list>
-                <q-item clickable tabindex="0">
+                <!-- <q-item clickable tabindex="0">
                   <q-item-section avatar>
                     <q-avatar
                       icon="delete"
@@ -44,7 +44,7 @@
                   <q-item-section side>
                     <q-icon name="info" />
                   </q-item-section>
-                </q-item>
+                </q-item> -->
                 <q-item clickable tabindex="0">
                   <q-item-section avatar>
                     <q-avatar
@@ -54,11 +54,17 @@
                       text-color="white"
                     />
                   </q-item-section>
-                  <q-item-section>
+                  <q-item-section
+                    @click="
+                      {
+                        {
+                          changePrices();
+                        }
+                      }
+                    "
+                  >
                     <q-item-label>Ajustar precios</q-item-label>
-                    <q-item-label caption>{{
-                      getSelectedString()
-                    }}</q-item-label>
+                    <q-item-label caption></q-item-label>
                   </q-item-section>
                   <q-item-section side>
                     <q-icon name="info" />
@@ -172,7 +178,7 @@
         </template>
         <template v-slot:body="props">
           <q-tr :props="props">
-            <q-td class="text-center">
+            <!-- <q-td class="text-center">
               <q-checkbox
                 dense
                 color="primary"
@@ -180,22 +186,42 @@
                 keep-color
                 v-model="props.selected"
               />
+            </q-td> -->
+            <q-td key="codigo_prod" auto-width>
+              {{ props.row.codigo_prod }}
             </q-td>
-            <q-td key="codeProduct" auto-width> {{ props.row.id }} </q-td>
-            <q-td key="name" auto-width>
-              {{ props.row.descripcion_pago }}
+            <q-td key="nombre_prod" auto-width>
+              {{ props.row.nombre_prod }}
             </q-td>
-            <q-td key="cost" auto-width>
-              {{ props.row.descripcion_pago }}
+            <q-td key="descripcion_prod" auto-width>
+              {{ props.row.descripcion_prod }}
             </q-td>
-            <q-td key="price" auto-width>
-              {{ props.row.descripcion_pago }}
+            <q-td key="costo_prod" auto-width>
+              {{ props.row.costo_prod }} $
             </q-td>
-            <q-td key="inventory" auto-width>
-              {{ props.row.descripcion_pago }}
+            <q-td key="precio_prod" auto-width>
+              {{ props.row.precio_prod }} $
             </q-td>
-            <q-td key="status" auto-width>
-              {{ props.row.descripcion_pago }}
+            <q-td key="impuesto_prod" auto-width>
+              {{ props.row.impuesto_prod }} %
+            </q-td>
+            <q-td key="utilidad_prod" auto-width>
+              {{ props.row.utilidad_prod }} %
+            </q-td>
+            <q-td key="categoria" auto-width>
+              {{ JSON.parse(props.row.categoria).join(', ') }}
+            </q-td>
+            <q-td key="precio_bcv" auto-width>
+              {{ props.row.precio_bcv }} Bs.
+            </q-td>
+            <q-td key="precio_promedio" auto-width>
+              {{ props.row.precio_promedio }} Bs.
+            </q-td>
+            <q-td key="precio_paralelo" auto-width>
+              {{ props.row.precio_paralelo }} Bs.
+            </q-td>
+            <q-td key="PresentacionProd" auto-width>
+              {{ props.row.PresentacionProd.nombre_present }}
             </q-td>
             <q-td key="actions" class="text-center" auto-width>
               <q-btn
@@ -224,6 +250,9 @@
       </q-table>
     </div>
   </div>
+  <modal-price-change
+    v-if="utilsDollarStore.getterModalChangePrices"
+  ></modal-price-change>
 </template>
 
 <script setup lang="ts">
@@ -235,12 +264,15 @@ import { Notify } from 'quasar';
 import { usePaymentStore } from 'src/stores/payment';
 import { useCategoryStore } from 'src/stores/category';
 import { useProductStore } from 'src/stores/products';
+import { useUtilsDollarStore } from 'src/stores/utilsDollar';
+import modalPriceChange from 'src/components/products/modalPriceChange.vue';
 
 const categoryStore = useCategoryStore();
 const swal = inject('$swal');
 const categorySelected = ref({});
 const paymentStore = usePaymentStore();
 const productsStore = useProductStore();
+const utilsDollarStore = useUtilsDollarStore();
 const filter = ref('');
 const selected = ref([]);
 const products = computed(() => productsStore.getProductAll);
@@ -264,6 +296,15 @@ const columns = [
     label: 'Código',
     align: 'left',
     field: (row) => row.codigo_prod,
+    format: (val) => `${val}`,
+    sortable: true,
+  },
+  {
+    name: 'nombre_prod',
+    required: true,
+    label: 'Nombre',
+    align: 'left',
+    field: (row) => row.nombre_prod,
     format: (val) => `${val}`,
     sortable: true,
   },
@@ -318,7 +359,7 @@ const columns = [
     label: 'Categoria',
     align: 'left',
     field: (row) => row.categoria,
-    format: (val) => `${val}`,
+    format: (val) => JSON.parse(val).join(', '),
     sortable: true,
   },
   {
@@ -365,6 +406,7 @@ const columns = [
     sortable: true,
   },
 ];
+
 const getSelectedString = () => {
   return selected.value.length === 0
     ? ''
@@ -375,6 +417,12 @@ const getSelectedString = () => {
 const openModalAdd = (row = {}) => {
   paymentStore.manageModal(true, true, row);
 };
+
+const changePrices = () => {
+  console.log('hola');
+  utilsDollarStore.adminModalChange(true);
+};
+
 const confirmDelete = (id = 1) => {
   swal
     .fire({
